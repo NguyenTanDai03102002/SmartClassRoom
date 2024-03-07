@@ -1,0 +1,22 @@
+.wrapper {
+    width: 100%;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.heading {
+    display: block;
+    text-align: center;
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 50px;
+    &:hover {
+        color: rgb(7, 127, 228);
+    }
+}
+.content {
+    img {
+        display: inline-flex;
+        width: 50%;
+    }
+}

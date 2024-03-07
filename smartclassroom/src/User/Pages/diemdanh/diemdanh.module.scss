@@ -1,0 +1,90 @@
+.wrapper {
+    width: 1200px;
+    max-width: 100%;
+    margin: 20px auto;
+    h1 {
+        text-align: center;
+        font-size: 3rem;
+        font-weight: 700;
+    }
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+.radio {
+    display: flex;
+    margin: 0 40px;
+
+    .input {
+        margin: 0 10px;
+
+        input {
+            margin: 0 4px;
+        }
+    }
+}
+
+.list-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    .table-header {
+        .thstyles {
+            background-color: #3498db;
+            color: var(--white-color);
+            font-size: 1.8rem;
+            font-weight: 600;
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid var(--white-color);
+            border-radius: 8px;
+        }
+    }
+    .table-content {
+        .table-row {
+            display: table-row;
+            transition: background-color 0.3s ease;
+            &:nth-child(odd) .tdstyles {
+                background-color: #f5f5f5; /* Màu nền cho hàng lẻ */
+            }
+            &:nth-child(even) .tdstyles {
+                background-color: #e0e0e0; /* Màu nền cho hàng chẵn */
+            }
+            .tdstyles {
+                color: rgb(70, 70, 70);
+                font-size: 1.6rem;
+                font-weight: 600;
+                text-align: center;
+                transition: background-color ease-in-out 200ms;
+
+                &:last-child {
+                    text-align: center;
+                }
+                .btn-control {
+                    position: relative;
+                    left: 50%;
+                    transform: translateX(-100%);
+                }
+                .td-link {
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                    padding: 16px 12px;
+                }
+            }
+        }
+    }
+}
+
+.submit {
+    text-align: center;
+    margin: 10px 0;
+    .btn {
+        border-radius: 50px;
+    }
+}

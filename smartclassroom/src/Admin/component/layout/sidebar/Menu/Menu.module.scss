@@ -1,0 +1,37 @@
+.menu-item {
+    display: flex;
+    align-items: center;
+    font-size: 1.8rem;
+    font-weight: 500;
+    padding: 12px;
+    margin: 20px;
+    border-radius: 6px;
+    transition: background-color ease-in-out 200ms;
+    color: var(--white-color);
+    &:hover {
+        background: var(--white-color);
+        color: #11101d;
+    }
+    &.active {
+        font-weight: 600;
+        color: var(--white-color);
+        background: #1e94f5;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        text-shadow: 1px 1px #11101d;
+    }
+}
+
+.icon {
+    margin-left: 12px;
+    width: 25px;
+}
+.title {
+    margin-left: 10px;
+}
+
+.collapsed {
+    margin: 20px 10px;
+    .icon {
+        margin-left: 9px;
+    }
+}

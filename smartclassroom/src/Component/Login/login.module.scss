@@ -1,0 +1,101 @@
+.wrapper {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .container {
+        width: 500px;
+        margin: 0 auto;
+        margin-top: -50px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .title {
+        text-align: center;
+        margin: 20px 0;
+        font-size: 3rem;
+        font-weight: 700;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    input {
+        padding: 8px;
+        margin-bottom: 20px;
+        display: block;
+        width: 100%;
+        border-radius: 5px;
+        font-size: 2rem;
+    }
+
+    .forget-password {
+        padding: 5px;
+        margin: 20px 0;
+    }
+
+    button {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    .loading {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(255, 255, 255, 0.8);
+        z-index: 1000;
+
+        @keyframes bounce {
+            0%,
+            100% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .dot-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dot {
+            width: 5px;
+            height: 5px;
+            background-color: #333;
+            border-radius: 50%;
+            margin: 0 5px;
+            margin-top: 6px;
+            animation: bounce 1.3s infinite;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+    }
+}

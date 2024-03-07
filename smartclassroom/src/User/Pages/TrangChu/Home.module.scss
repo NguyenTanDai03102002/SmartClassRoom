@@ -1,0 +1,92 @@
+.wrapper {
+    background-color: var(--white-color);
+}
+
+@keyframes moveAcrossScreen {
+    to {
+        transform: translateX(-50%);
+    }
+    from {
+        transform: translateX(100%);
+    }
+}
+.title {
+    padding: 6px 0;
+    background-color: #fdf644;
+    overflow: hidden;
+    p {
+        padding: 2px 0;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #ed1c24;
+        animation: moveAcrossScreen 50s linear infinite;
+    }
+}
+
+.content {
+    width: 1350px;
+    max-width: 100%;
+    margin: 20px auto;
+}
+
+// .sub-page-content {
+//     padding: 50px 0 0 0;
+
+//     .container {
+//         width: 1200px;
+//         margin: 0 auto;
+//         max-width: 100%;
+
+//         .pageContentLoadControl {
+//             display: flex;
+//             justify-content: space-between;
+
+//             .left {
+//                 width: calc(33.333% - 20px);
+//             }
+
+//             .right {
+//                 width: calc(66.666% - 10px);
+//             }
+//         }
+//     }
+// }
+
+// .activities {
+//     width: 1200px;
+//     margin: 0 auto;
+//     max-width: 100%;
+//     margin-bottom: 50px;
+// }
+
+// // video
+// .video {
+//     width: 100%;
+//     background-color: var(--white-color);
+//     padding: 20px 0;
+//     h1 {
+//         display: inline-block;
+//         background-color: #ed1c24;
+//         border-radius: 4px;
+//         border-left: 5px solid blue;
+//         color: var(--white-color);
+//         margin-left: 20px;
+//         padding: 10px;
+//         font-size: 3rem;
+//         font-weight: 700;
+//     }
+// }
+
+// .events {
+//     margin: 20px 0;
+// }
+
+// .numbers {
+//     padding: 50px 0;
+//     background-image: url(https://cantho-school.fpt.edu.vn/wp-content/uploads/190926_1268-1.png.webp);
+// }
+
+// .images {
+//     padding: 30px 0;
+//     margin-bottom: 40px;
+// }

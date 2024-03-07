@@ -1,0 +1,59 @@
+.header-top {
+    width: 1200px;
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+}
+.socical {
+    .link {
+        margin: 10px;
+        .icon {
+            margin: 0 0;
+            font-size: 1.5rem;
+            color: var(--white-color);
+            border-radius: 50%;
+            padding: 6px;
+            background-color: #108588;
+        }
+    }
+}
+
+.contact {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--white-color);
+    font-size: 1.7rem;
+    .icon {
+        color: var(--white-color);
+        margin-right: 8px;
+    }
+
+    .mail {
+        padding-right: 10px;
+        border-right: 1px solid var(--white-color);
+        margin-right: 10px;
+    }
+
+    .user_logged {
+        span {
+            margin-left: 20px;
+        }
+        .logout {
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    .login {
+        .btn-login {
+            border-radius: 10px;
+            padding: 4px 10px;
+            color: var(--white-color);
+        }
+    }
+}

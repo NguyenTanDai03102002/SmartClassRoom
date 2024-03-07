@@ -1,0 +1,25 @@
+.wrapper {
+    width: 300px;
+    // height: 100vh;
+    background-color: #0c67b3;
+    color: var(--white-color);
+    box-shadow: 0 1px 2px 1px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    .logo-details {
+        display: flex;
+        justify-content: space-between;
+        margin: 12px;
+    }
+
+    .logo-icon {
+        cursor: pointer;
+    }
+}
+
+.collapsed {
+    width: 100px;
+
+    .logo-icon {
+        margin-left: 20px;
+    }
+}
