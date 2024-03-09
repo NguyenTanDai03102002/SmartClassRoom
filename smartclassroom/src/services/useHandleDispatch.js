@@ -1,34 +1,27 @@
 import { useDispatch } from 'react-redux';
-import {
-    loginSuccess,
-    loginFailure,
-    loginRequest,
-    logoutSuccess,
-    fetchAllClassesRequest,
-    fetchAllClassesSuccess,
-    fetchAllClassesFailure,
-} from '../redux/actions';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { getAllBlock, getAllClassesByYear, userLogin } from './axios';
-import { fetchAllBlocksFailure, fetchAllBlocksRequest, fetchAllBlocksSuccess } from '../redux/actions';
+import authSlice from '../ReducerSlice/authSlice';
+import blockSlice from '../ReducerSlice/blockSlice';
+import classesSlice from '../ReducerSlice/ClassesSlice';
 
 export const useHandleDispatch = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const logoutUser = () => {
-        dispatch(logoutSuccess());
+        dispatch(authSlice.actions.LOGOUT_SUCCESS());
         toast.success('Logout thành công');
         navigate('/login');
     };
     const loginUser = (datalogin, setDatalogin, usernameInputRef) => {
-        dispatch(loginRequest());
+        dispatch(authSlice.actions.LOGIN_REQUEST());
 
         setTimeout(() => {
             userLogin(datalogin)
                 .then((response) => {
-                    dispatch(loginSuccess(response.data));
+                    dispatch(authSlice.actions.LOGIN_SUCCESS(response.data));
                     const role = response.data.user.roles;
                     if (role.includes('ADMIN')) {
                         navigate('/admin');
@@ -38,7 +31,7 @@ export const useHandleDispatch = () => {
                     toast.success('Đăng nhập thành công');
                 })
                 .catch((error) => {
-                    dispatch(loginFailure(error.message));
+                    dispatch(authSlice.actions.LOGIN_FAILURE(error.message));
                     toast.error('Đăng nhập thất bại');
                     setDatalogin({
                         email: '',
@@ -49,26 +42,26 @@ export const useHandleDispatch = () => {
         }, 2000);
     };
     const fecthBlock = () => {
-        dispatch(fetchAllBlocksRequest());
+        dispatch(blockSlice.actions.FETCH_ALL_BLOCKS_REQUEST());
 
         getAllBlock()
             .then((reponse) => {
-                dispatch(fetchAllBlocksSuccess(reponse.data));
+                dispatch(blockSlice.actions.FETCH_ALL_BLOCKS_SUCCESS(reponse.data));
             })
             .catch((error) => {
-                dispatch(fetchAllBlocksFailure(error.message));
+                dispatch(blockSlice.actions.FETCH_ALL_BLOCKS_FAILURE(error.message));
             });
     };
 
     const fecthClasses = (year) => {
-        dispatch(fetchAllClassesRequest());
+        dispatch(classesSlice.actions.FETCH_ALL_CLASSES_REQUEST());
 
         getAllClassesByYear(year)
             .then((reponse) => {
-                dispatch(fetchAllClassesSuccess(reponse.data));
+                dispatch(classesSlice.actions.FETCH_ALL_CLASSES_SUCCESS(reponse.data));
             })
             .catch((error) => {
-                dispatch(fetchAllClassesFailure(error.message));
+                dispatch(classesSlice.actions.FETCH_ALL_CLASSES_FAILURE(error.message));
             });
     };
 
