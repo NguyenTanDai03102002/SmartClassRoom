@@ -1,10 +1,11 @@
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { getAllBlock, getAllClassesByYear, userLogin } from './axios';
+import { getAllBlock, getAllClassesByYear, getAllTeacher, putAllTeachersToClasses, userLogin } from './axios';
 import authSlice from '../ReducerSlice/authSlice';
 import blockSlice from '../ReducerSlice/blockSlice';
-import classesSlice from '../ReducerSlice/ClassesSlice';
+import classesSlice from '../ReducerSlice/classesSlice';
+import teacherSlice from '../ReducerSlice/teacherSlice';
 
 export const useHandleDispatch = () => {
     const dispatch = useDispatch();
@@ -65,5 +66,29 @@ export const useHandleDispatch = () => {
             });
     };
 
-    return { logoutUser, loginUser, fecthBlock, fecthClasses };
+    const fetchTeachers = (token) => {
+        getAllTeacher(token)
+            .then((reponse) => {
+                dispatch(teacherSlice.actions.FETCH_ALL_TEACHERS_SUCCESS(reponse.data));
+            })
+            .catch((error) => {
+                dispatch(teacherSlice.actions.FETCH_ALL_TEACHERS_FAILURE(error.message));
+            });
+    };
+
+    const putteacherstoclasses = (selectedTeacher, token, setFinish, setEditing) => {
+        putAllTeachersToClasses(selectedTeacher, token)
+            .then((reponse) => {
+                dispatch(classesSlice.actions.FETCH_ALL_CLASSES_SUCCESS(reponse.data));
+                toast.success('Hoàn thành');
+            })
+            .catch((error) => {
+                dispatch(classesSlice.actions.FETCH_ALL_CLASSES_FAILURE(error.message));
+                toast.error('Thất bại');
+            });
+        setFinish(false);
+        setEditing(false);
+    };
+
+    return { logoutUser, loginUser, fecthBlock, fecthClasses, fetchTeachers, putteacherstoclasses };
 };

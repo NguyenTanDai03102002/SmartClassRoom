@@ -7,3 +7,5 @@ export const userToken = (state) => state.auth.token;
 export const Blocks = (state) => state.block.blocks;
 
 export const Classes = (state) => state.class.classes;
+
+export const Teachers = (state) => state.teacher.teachers;

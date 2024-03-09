@@ -1,13 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authSlice from '../ReducerSlice/authSlice';
 import blockSlice from '../ReducerSlice/blockSlice';
-import classesSlice from '../ReducerSlice/ClassesSlice';
+import classesSlice from '../ReducerSlice/classesSlice';
+import teacherSlice from '../ReducerSlice/teacherSlice';
 
 const store = configureStore({
     reducer: {
         auth: authSlice.reducer,
         block: blockSlice.reducer,
         class: classesSlice.reducer,
+        teacher: teacherSlice.reducer,
     },
 });
 

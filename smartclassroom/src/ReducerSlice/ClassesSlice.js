@@ -19,6 +19,9 @@ const classesSlice = createSlice({
             state.classError = action.payload;
             state.classLoading = false;
         },
+        ADD_ALL_TEACHER_TO_CLASSES: (state, action) => {
+            state.classes = action.payload;
+        },
     },
 });
 

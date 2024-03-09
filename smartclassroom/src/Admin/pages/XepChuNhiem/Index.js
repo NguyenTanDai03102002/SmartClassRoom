@@ -3,76 +3,70 @@ import classNames from 'classnames/bind';
 import Styles from './xepchunhiem.module.scss';
 import Button from '../../../Component/button/Button';
 import { useHandleDispatch } from '../../../services/useHandleDispatch';
-import { useDispatch, useSelector } from 'react-redux';
-import { Classes, userToken } from '../../../redux/selectors';
-import { getAllTeacher, putAllTeachersToClasses } from '../../../services/axios';
-import { fetchAllClassesSuccess } from '../../../redux/actions';
+import { useSelector } from 'react-redux';
+import { Classes, Teachers, userToken } from '../../../redux/selectors';
 
 const cx = classNames.bind(Styles);
 
 function Index() {
-    const dispatch = useDispatch();
-    const { fecthClasses } = useHandleDispatch();
+    const { fecthClasses, fetchTeachers, putteacherstoclasses } = useHandleDispatch();
     const classes = useSelector(Classes);
-    console.log(classes);
     const token = useSelector(userToken);
-    const [teachers, setTeachers] = useState([]);
+    const teachers = useSelector(Teachers);
     const [selectedTeacher, setSelectedTeacher] = useState([]);
-    const [show, setShow] = useState(false);
+    const [finish, setFinish] = useState(false);
+    const [editing, setEditing] = useState(false);
+    const [editingTeacherID, setEditingTeacherID] = useState(null);
+    // const [selectedUpdate, setSelectedUpdate] = useState([]);
 
     useEffect(() => {
         fecthClasses();
+        fetchTeachers(token);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    useEffect(() => {
-        const fetchTeachers = async () => {
-            try {
-                const response = await getAllTeacher(token);
-                setTeachers(response.data);
-            } catch (error) {
-                console.error('Error fetching teachers:', error);
-            }
-        };
-
-        fetchTeachers();
-    }, [token]);
 
     const handleTeacherChange = (classId, teacherId) => {
-        const existingIndex = selectedTeacher.findIndex((item) => item.classId === classId);
-        if (existingIndex !== -1) {
+        const index = selectedTeacher.findIndex((item) => item.classId === classId);
+        const newSelectedTeacher = [...selectedTeacher];
+        if (index !== -1) {
             if (teacherId !== '') {
-                const updateTeacherIdOfClassid = [...selectedTeacher];
-                updateTeacherIdOfClassid[existingIndex] = {
-                    ...updateTeacherIdOfClassid[existingIndex],
+                newSelectedTeacher[index] = {
+                    ...newSelectedTeacher[index],
                     teacherId: parseInt(teacherId),
                 };
-                setSelectedTeacher(updateTeacherIdOfClassid);
             } else {
-                setSelectedTeacher(selectedTeacher.filter((item) => item.classId !== classId));
+                newSelectedTeacher.splice(index, 1);
             }
         } else {
-            setSelectedTeacher([...selectedTeacher, { classId, teacherId: parseInt(teacherId) }]);
+            newSelectedTeacher.push({ classId: classId, teacherId: parseInt(teacherId) });
         }
-    };
+        setSelectedTeacher(newSelectedTeacher);
 
-    const allClassesHaveTeacher = () => {
-        for (let i = 0; i < classes.length; i++) {
-            if (!selectedTeacher.find((teacher) => teacher.classId === classes[i].id)) {
-                return false;
-            }
-        }
-        return true;
+        const selectedClassIds = newSelectedTeacher.map((item) => item.classId);
+        const classesIds = classes.map((item) => item.id);
+        setFinish(selectedClassIds.length === classesIds.length);
     };
 
     const handleSubmitAddTeachers = () => {
-        putAllTeachersToClasses(selectedTeacher, token)
-            .then((reponse) => {
-                dispatch(fetchAllClassesSuccess(reponse.data));
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-        setShow(false);
+        putteacherstoclasses(selectedTeacher, token, setFinish, setEditing);
+    };
+
+    const handleEditTeacher = (classId, teacherId) => {
+        setEditing(true);
+        setEditingTeacherID(teacherId);
+
+        const selectedTeacherForClass = selectedTeacher.find((teacher) => teacher.classId === classId);
+
+        if (selectedTeacherForClass) {
+            setSelectedTeacher([{ classId: classId, teacherId: selectedTeacherForClass.teacherId }]);
+        } else {
+            setSelectedTeacher([{ classId: classId, teacherId: teacherId }]);
+        }
+    };
+
+    const handleHuy = () => {
+        setEditing(false);
+        setEditingTeacherID(null);
     };
 
     const tableheader = (
@@ -95,6 +89,14 @@ function Index() {
             const teacher = teachers.find((teacher) => teacher.id === teacherId);
             return teacher ? `${teacher.maSo} - ${teacher.fullName}` : '';
         };
+
+        const editTeachersList = teachers.filter((teacher) => {
+            if (teacher.id === editingTeacherID) {
+                return true;
+            }
+            return !classes.map((cl) => cl.teacher?.id).includes(teacher.id);
+        });
+
         return (
             <tr key={item.id} className={cx('table-row')}>
                 <td className={cx('tdstyles')}>
@@ -105,8 +107,49 @@ function Index() {
                 </td>
                 <td className={cx('tdstyles')}>
                     <div className={cx('td-link')}>
-                        {item.teacher && item.teacher.id && !show ? (
-                            `${item.teacher.maSo} - ${item.teacher.fullName}`
+                        {item.teacher && item.teacher.id ? (
+                            editing && editingTeacherID === item.teacher.id ? (
+                                <>
+                                    <select
+                                        className={cx('classDropdown')}
+                                        onChange={(e) => handleTeacherChange(item.id, e.target.value)}
+                                        value={selectedTeacherForClass ? selectedTeacherForClass.teacherId : ''}
+                                    >
+                                        {editTeachersList.map((option) => (
+                                            <option key={option.id} value={option.id}>
+                                                {option.maSo} - {option.fullName}
+                                            </option>
+                                        ))}
+                                        {/* {selectedTeacherForClass && (
+                                            <option
+                                                // key={selectedTeacherForClass.teacherId}
+                                                // value={selectedTeacherForClass.teacherId}
+                                                hidden
+                                            >
+                                                {getTeacherName(selectedTeacherForClass.teacherId)}
+                                            </option>
+                                        )} */}
+                                    </select>
+                                    <Button className={cx('btn')} onClick={handleSubmitAddTeachers}>
+                                        Lưu
+                                    </Button>
+                                    <Button className={cx('btn')} onClick={handleHuy}>
+                                        Hủy
+                                    </Button>
+                                </>
+                            ) : (
+                                <div className={cx('gvcn')}>
+                                    <div className={cx('information')}>
+                                        {item.teacher.maSo} - {item.teacher.fullName}
+                                    </div>
+                                    <Button
+                                        className={cx('edit')}
+                                        onClick={() => handleEditTeacher(item.id, item.teacher.id)}
+                                    >
+                                        Edit
+                                    </Button>
+                                </div>
+                            )
                         ) : (
                             <select
                                 className={cx('classDropdown')}
@@ -123,6 +166,7 @@ function Index() {
                                     <option
                                         key={selectedTeacherForClass.teacherId}
                                         value={selectedTeacherForClass.teacherId}
+                                        hidden
                                     >
                                         {getTeacherName(selectedTeacherForClass.teacherId)}
                                     </option>
@@ -147,7 +191,7 @@ function Index() {
                     <thead className={cx('table-header')}>{tableheader}</thead>
                     <tbody className={cx('table-content')}>{tablecontent}</tbody>
                 </table>
-                {allClassesHaveTeacher() && (
+                {finish && (
                     <div className={cx('submit')}>
                         <Button className={cx('btn')} onClick={handleSubmitAddTeachers}>
                             Hoàn Thành
