@@ -1,5 +1,5 @@
 import React from 'react';
-import Menu from '../../../../../Component/popper/Menu/Index';
+import Menu from '../../../../../Component/popper/Menu/Menu';
 import Button from '../../../../../Component/button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretRight, faChevronDown } from '@fortawesome/free-solid-svg-icons';

@@ -7,28 +7,38 @@ import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(Styles);
 
-function Paginate({ totalPage, postsPerPage, currentPage, setCurrentPage }) {
+function Paginate({ totalPages, currentPage, setCurrentPage }) {
     let pages = [];
 
-    for (let i = 1; i <= Math.ceil(totalPage / postsPerPage); i++) {
+    let startPage = Math.max(0, currentPage - 1);
+    let endPage = Math.min(startPage + 2, totalPages - 1);
+
+    for (let i = startPage; i <= endPage; i++) {
         pages.push(i);
     }
-
-    const handlePrev = () => {
-        if (currentPage > 1) setCurrentPage(currentPage - 1);
+    const handleprev = () => {
+        if (currentPage > 0) {
+            setCurrentPage(currentPage - 1);
+        }
     };
     const handleNext = () => {
-        if (currentPage < pages.length) setCurrentPage(currentPage + 1);
+        if (currentPage < totalPages - 1) {
+            setCurrentPage(currentPage + 1);
+        }
     };
-    // const visiblePages = pages.slice(Math.max(0, currentPage - 2), Math.min(pages.length, currentPage + 1));
 
     return (
         <div className={cx('paginate-container')}>
             <div className={cx('pagination')}>
-                <div className={cx('move')} onClick={handlePrev}>
-                    <FontAwesomeIcon icon={faAngleLeft} className={cx('move-icon', { disabled: currentPage === 1 })} />
+                <div className={cx('move')}>
+                    <FontAwesomeIcon
+                        icon={faAngleLeft}
+                        onClick={handleprev}
+                        className={cx('move-icon', { disabled: currentPage === 0 })}
+                    />
                 </div>
                 <div className={cx('pages')}>
+                    {currentPage >= totalPages - 2 && totalPages > 3 && <span className={cx('vv')}>. . .</span>}
                     {pages.map((page, index) => (
                         <Button
                             className={cx('page-btn', { active: page === currentPage })}
@@ -37,14 +47,16 @@ function Paginate({ totalPage, postsPerPage, currentPage, setCurrentPage }) {
                                 setCurrentPage(page);
                             }}
                         >
-                            {page}
+                            {page + 1}
                         </Button>
                     ))}
+                    {currentPage <= 1 && totalPages > 3 && <span className={cx('vv')}>. . .</span>}
                 </div>
-                <div className={cx('move')} onClick={handleNext}>
+                <div className={cx('move')}>
                     <FontAwesomeIcon
                         icon={faAngleRight}
-                        className={cx('move-icon', { disabled: currentPage === pages.length })}
+                        onClick={handleNext}
+                        className={cx('move-icon', { disabled: currentPage === totalPages - 1 })}
                     />
                 </div>
             </div>

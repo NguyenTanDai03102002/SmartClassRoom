@@ -1,4 +1,4 @@
-import Menu from '../../../../Component/popper/Menu/Index';
+import Menu from '../../../../Component/popper/Menu/Menu';
 import Styles from './Header.module.scss';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,6 +7,7 @@ import Button from '../../../../Component/button/Button';
 import { useSelector } from 'react-redux';
 import { authUser } from '../../../../redux/selectors';
 import { useHandleDispatch } from '../../../../services/useHandleDispatch';
+import { useEffect, useState } from 'react';
 
 const cx = classNames.bind(Styles);
 
@@ -19,7 +20,8 @@ const MenuItems = [
 ];
 
 function Header() {
-    const { logoutUser } = useHandleDispatch();
+    const { logoutUser, getImageOfUser } = useHandleDispatch();
+    const [userImage, setUserImage] = useState(null);
 
     const handleLogout = () => {
         logoutUser();
@@ -27,6 +29,19 @@ function Header() {
 
     const user = useSelector(authUser);
 
+    useEffect(() => {
+        async function fetchUserImage() {
+            try {
+                const imageUrl = await getImageOfUser(user);
+                if (imageUrl) {
+                    setUserImage(imageUrl);
+                }
+            } catch (error) {
+                console.error('Error fetching image:', error);
+            }
+        }
+        fetchUserImage();
+    }, [user]);
     return (
         <header className={cx('wrapper')}>
             <div className={cx('header-left')}>
@@ -39,10 +54,7 @@ function Header() {
             <div className={cx('r')}>
                 <Menu items={MenuItems}>
                     <div className={cx('header-right')}>
-                        <img
-                            src="https://tse1.mm.bing.net/th?id=OIP.bsTORn_mndhaTrs-iG9hwAHaHa&pid=Api&P=0&h=180"
-                            alt="anh"
-                        ></img>
+                        <img src={userImage} alt="anh"></img>
                         {user ? <h4>{user.fullName}</h4> : <h4>{''}</h4>}
                     </div>
                 </Menu>

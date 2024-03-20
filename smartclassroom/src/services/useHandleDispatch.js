@@ -1,11 +1,22 @@
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { getAllBlock, getAllClassesByYear, getAllTeacher, putAllTeachersToClasses, userLogin } from './axios';
+import {
+    getAllBlock,
+    getAllClassesByYearAndBlock,
+    getAllTeacher,
+    getImage,
+    importStudentsFromExcel,
+    putAllTeachersToClasses,
+    userLogin,
+    getAllStudentsOfClass,
+    deleteUserClass,
+} from './axios';
 import authSlice from '../ReducerSlice/authSlice';
 import blockSlice from '../ReducerSlice/blockSlice';
 import classesSlice from '../ReducerSlice/classesSlice';
 import teacherSlice from '../ReducerSlice/teacherSlice';
+import studentSlice from '../ReducerSlice/studentSlice';
 
 export const useHandleDispatch = () => {
     const dispatch = useDispatch();
@@ -42,6 +53,18 @@ export const useHandleDispatch = () => {
                 });
         }, 2000);
     };
+
+    const getImageOfUser = async (user) => {
+        try {
+            const response = await getImage(user.id, { responseType: 'blob' });
+            const imageUrl = URL.createObjectURL(response.data);
+            return imageUrl;
+        } catch (error) {
+            console.error('Error fetching image:', error);
+            return null;
+        }
+    };
+
     const fecthBlock = () => {
         dispatch(blockSlice.actions.FETCH_ALL_BLOCKS_REQUEST());
 
@@ -54,10 +77,10 @@ export const useHandleDispatch = () => {
             });
     };
 
-    const fecthClasses = (year) => {
+    const fecthClasses = (year, blockid) => {
         dispatch(classesSlice.actions.FETCH_ALL_CLASSES_REQUEST());
 
-        getAllClassesByYear(year)
+        getAllClassesByYearAndBlock(year, blockid)
             .then((reponse) => {
                 dispatch(classesSlice.actions.FETCH_ALL_CLASSES_SUCCESS(reponse.data));
             })
@@ -90,5 +113,52 @@ export const useHandleDispatch = () => {
         setEditing(false);
     };
 
-    return { logoutUser, loginUser, fecthBlock, fecthClasses, fetchTeachers, putteacherstoclasses };
+    const putStudentsFromExcel = async (idlop, formatData, token) => {
+        try {
+            const response = await importStudentsFromExcel(idlop, formatData, token);
+            if (response.status === 200) {
+                getallstudentsofclass(idlop);
+            }
+            toast.success('Import thành công');
+        } catch (error) {
+            dispatch(studentSlice.actions.PUT_STUDENTS_TO_CLASS_FAILURE(error.message));
+            toast.error('Thất bại');
+        }
+    };
+
+    const getallstudentsofclass = async (idlop, page, size, keyword) => {
+        try {
+            const response = await getAllStudentsOfClass(idlop, page, size, keyword);
+            dispatch(studentSlice.actions.PUT_STUDENTS_TO_CLASS_SUCCESS(response.data));
+        } catch (error) {
+            dispatch(studentSlice.actions.PUT_STUDENTS_TO_CLASS_FAILURE(error.message));
+        }
+    };
+
+    const deleteUserfromClass = async (userid, classid, token, page, keyword) => {
+        try {
+            const response = await deleteUserClass(userid, classid, token);
+            if (response.status === 200) {
+                getallstudentsofclass(classid, page, null, keyword);
+                toast.success('học sinh đã được xóa');
+            } else {
+                toast.error('thất bại');
+            }
+        } catch (error) {
+            toast.error('thất bại');
+        }
+    };
+
+    return {
+        logoutUser,
+        loginUser,
+        fecthBlock,
+        fecthClasses,
+        fetchTeachers,
+        putteacherstoclasses,
+        getImageOfUser,
+        putStudentsFromExcel,
+        getallstudentsofclass,
+        deleteUserfromClass,
+    };
 };

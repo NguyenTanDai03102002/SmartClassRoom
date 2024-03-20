@@ -1,69 +1,70 @@
-import React, { useState } from 'react';
-import Button from '../../../../Component/button/Button';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faDeleteLeft, faEdit, faEllipsisVertical, faUser } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames/bind';
 import Styles from './table.module.scss';
-import { Link } from 'react-router-dom';
+import Menu from '../../../../Component/popper/Menu/Menu';
+import { useSelector } from 'react-redux';
 import Paginate from '../../../../Component/paginate/paginate';
+import { useHandleDispatch } from '../../../../services/useHandleDispatch';
+import { userToken } from '../../../../redux/selectors';
 
 const cx = classNames.bind(Styles);
 
-function StudentTable({ show, posts, handleDeleteHS, handleEditHS, setIsEditing }) {
-    const [currentPage, setCurrentPage] = useState(1);
-    const postsPerPage = 6;
+function StudentTable({ dataStudents, idlop, keyword }) {
+    const { getallstudentsofclass, deleteUserfromClass } = useHandleDispatch();
+    const totalPages = useSelector((state) => state.student.totalPages);
+    const token = useSelector(userToken);
+    const [currentPage, setCurrentPage] = useState(0);
 
-    const lastPostIndex = currentPage * postsPerPage;
-    const firstPostIndex = lastPostIndex - postsPerPage;
+    useEffect(() => {
+        getallstudentsofclass(idlop, currentPage, null, null);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentPage]);
 
-    const currentPost = posts.slice(firstPostIndex, lastPostIndex);
+    const handleDelete = (id) => {
+        deleteUserfromClass(id, idlop, token, currentPage, keyword);
+    };
+    const handleEdit = (id) => {
+        console.log(id);
+    };
+    const handleDetail = (id) => {
+        console.log(id);
+    };
 
-    const tableheader = (
-        <tr>
-            <th className={cx('thstyles')}>Mã số học sinh</th>
-            <th className={cx('thstyles')}>Họ Tên</th>
-            <th className={cx('thstyles')}>Giới Tính</th>
-            <th className={cx('thstyles')}>Ngày Sinh</th>
-            <th className={cx('thstyles')}>Địa chỉ</th>
-            <th className={cx('thstyles')}>Thao tác</th>
-        </tr>
-    );
-    const tablecontent = currentPost.map((item) => {
-        const handleDeleteClick = (e) => {
-            e.preventDefault();
-            handleDeleteHS(item.id);
-        };
-        const handleEditClick = (e) => {
-            e.preventDefault();
-            handleEditHS(item.id);
-            setIsEditing(true);
-        };
+    const getMenuItems = (id) => [
+        {
+            icon: <FontAwesomeIcon icon={faDeleteLeft} />,
+            title: 'Delete',
+            onclick: () => handleDelete(id),
+        },
+        {
+            icon: <FontAwesomeIcon icon={faEdit} />,
+            title: 'Edit',
+            onclick: () => handleEdit(id),
+        },
+        {
+            icon: <FontAwesomeIcon icon={faUser} />,
+            title: 'Detail',
+            onclick: () => handleDetail(id),
+        },
+    ];
+
+    const tablecontent = dataStudents.map((item) => {
+        const MenuItems = getMenuItems(item.id);
         return (
             <tr key={item.id} className={cx('table-row')}>
+                <td className={cx('tdstyles')}>{item.maSo}</td>
+                <td className={cx('tdstyles')}>{item.fullName}</td>
+                <td className={cx('tdstyles')}>{item.sex === 0 ? 'Nam' : 'Nữ'}</td>
+                <td className={cx('tdstyles')}>{item.birthday}</td>
+                <td className={cx('tdstyles')}>{item.address}</td>
                 <td className={cx('tdstyles')}>
-                    <Link className={cx('td-link')} /*to={`/admin/hocsinh/${item.id}`}*/>{item.mahs}</Link>
-                </td>
-                <td className={cx('tdstyles')}>
-                    <Link className={cx('td-link')} /*to={`/admin/hocsinh/${item.id}`}*/>{item.hoten}</Link>
-                </td>
-                <td className={cx('tdstyles')}>
-                    <Link className={cx('td-link')} /*to={`/admin/hocsinh/${item.id}`}*/>{item.gioitinh}</Link>
-                </td>
-                <td className={cx('tdstyles')}>
-                    <Link className={cx('td-link')} /*to={`/admin/hocsinh/${item.id}`}*/>{item.ngaysinh}</Link>
-                </td>
-                <td className={cx('tdstyles')}>
-                    <Link className={cx('td-link')} /*to={`/admin/hocsinh/${item.id}`}*/>{item.diachi}</Link>
-                </td>
-                <td className={cx('tdstyles')}>
-                    <Button control onClick={handleDeleteClick}>
-                        <FontAwesomeIcon icon={faTrashCan} />
-                    </Button>
-                    {show === false && (
-                        <Button control onClick={handleEditClick}>
-                            <FontAwesomeIcon icon={faPen} />
-                        </Button>
-                    )}
+                    <Menu items={MenuItems} crud>
+                        <div className={cx('menu-name')}>
+                            <FontAwesomeIcon icon={faEllipsisVertical} />
+                        </div>
+                    </Menu>
                 </td>
             </tr>
         );
@@ -71,18 +72,22 @@ function StudentTable({ show, posts, handleDeleteHS, handleEditHS, setIsEditing 
     return (
         <>
             <table className={cx('list-table')}>
-                <thead className={cx('table-header')}>{tableheader}</thead>
+                <thead className={cx('table-header')}>
+                    <tr>
+                        <th className={cx('thstyles')}>Mã số học sinh</th>
+                        <th className={cx('thstyles')}>Họ Tên</th>
+                        <th className={cx('thstyles')}>Giới Tính</th>
+                        <th className={cx('thstyles')}>Ngày Sinh</th>
+                        <th className={cx('thstyles')}>Địa chỉ</th>
+                        <th className={cx('thstyles')}>Thao tác</th>
+                    </tr>
+                </thead>
                 <tbody className={cx('table-content')}>{tablecontent}</tbody>
             </table>
-            {currentPost.length > 0 ? (
-                <Paginate
-                    totalPage={posts.length}
-                    postsPerPage={postsPerPage}
-                    currentPage={currentPage}
-                    setCurrentPage={setCurrentPage}
-                />
+            {dataStudents.length > 0 ? (
+                <Paginate totalPages={totalPages} currentPage={currentPage} setCurrentPage={setCurrentPage} />
             ) : (
-                <h2 className={cx('nodata')}>Không tìm thấy kết quả tìm kiếm</h2>
+                <div className={cx('nodata')}>không có dữ liệu</div>
             )}
         </>
     );

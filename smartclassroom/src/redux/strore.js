@@ -3,6 +3,7 @@ import authSlice from '../ReducerSlice/authSlice';
 import blockSlice from '../ReducerSlice/blockSlice';
 import classesSlice from '../ReducerSlice/classesSlice';
 import teacherSlice from '../ReducerSlice/teacherSlice';
+import studentSlice from '../ReducerSlice/studentSlice';
 
 const store = configureStore({
     reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
         block: blockSlice.reducer,
         class: classesSlice.reducer,
         teacher: teacherSlice.reducer,
+        student: studentSlice.reducer,
     },
 });
 

@@ -41,9 +41,9 @@ const pageRoutes = [
     // admin/*
     { path: '/admin', Component: Home, layout: Headeronly, requireAuth: true },
     { path: '/admin/khoi', Component: Khoi, layout: Headeronly, requireAuth: true },
-    { path: '/admin/khoi/lop', Component: Lop, layout: Headeronly, requireAuth: true },
-    { path: '/admin/khoi/lop/hocsinh', Component: Hocsinh, layout: DefaultLayout, requireAuth: true },
-    { path: '/admin/khoi/lop/diem', Component: Diem, layout: DefaultLayout, requireAuth: true },
+    { path: '/admin/khoi/:idkhoi/lop', Component: Lop, layout: Headeronly, requireAuth: true },
+    { path: '/admin/khoi/:idkhoi/lop/:idlop/hocsinh', Component: Hocsinh, layout: DefaultLayout, requireAuth: true },
+    { path: '/admin/khoi/:idkhoi/lop/:idlop/diem', Component: Diem, layout: DefaultLayout, requireAuth: true },
     { path: '/admin/xep-lich-chu-nhiem', Component: Xepchunhiem, layout: Headeronly, requireAuth: true },
     // { path: '/admin/hocsinh/:id', Component: Chitiet, layout: DefaultLayout },
 ];

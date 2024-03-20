@@ -4,8 +4,11 @@ import Styles from './Popper.module.scss';
 
 const cx = classNames.bind(Styles);
 
-function Wrapper({ children, className }) {
-    return <div className={cx('wrapper', className)}>{children}</div>;
+function Wrapper({ children, crud }) {
+    const classes = cx('wrapper', {
+        crud,
+    });
+    return <div className={classes}>{children}</div>;
 }
 
 export default Wrapper;

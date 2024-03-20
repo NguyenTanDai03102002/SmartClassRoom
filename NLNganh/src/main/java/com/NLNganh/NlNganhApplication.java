@@ -1,7 +1,7 @@
 package com.NLNganh;
 
+import java.time.LocalDate;
 import java.time.MonthDay;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -53,18 +53,18 @@ public class NlNganhApplication {
 			Set<Role> teacherroles = new HashSet<>();
 			teacherroles.add(teacherrole);
 
-			User admin = new User((long) 1,"AD001", "admin", new Date(), "BL", "0000", 1, "admin.png", "admin@gmail.com","admin", passwordEncode.encode("admin"), adminroles);
-			User user = new User((long) 2,"", "user", new Date(), "BL", "0000", 1, "user.png", "user@gmail.com","user", passwordEncode.encode("user"), userroles);
-			User teacher1 = new User((long) 3,"GV001", "teacher1", new Date(), "BL", "0000", 1, "teacher1.png", "teacher1@gmail.com","teacher1", passwordEncode.encode("teacher1"), teacherroles);
-			User teacher2 = new User((long) 4,"GV002", "teacher2", new Date(), "BL", "0000", 1, "teacher2.png", "teacher2.com","teacher2", passwordEncode.encode("teacher2"), teacherroles);
-			User teacher3 = new User((long) 5,"GV003", "teacher3", new Date(), "BL", "0000", 1, "teacher1.png", "teacher1@gmail.com","teacher3", passwordEncode.encode("teacher3"), teacherroles);
-			User teacher4 = new User((long) 6,"GV004", "teacher4", new Date(), "BL", "0000", 1, "teacher2.png", "teacher2.com","teacher4", passwordEncode.encode("teacher4"), teacherroles);
-			User teacher5 = new User((long) 7,"GV005", "teacher5", new Date(), "BL", "0000", 1, "teacher1.png", "teacher1@gmail.com","teacher5", passwordEncode.encode("teacher5"), teacherroles);
-			User teacher6 = new User((long) 8,"GV006", "teacher6", new Date(), "BL", "0000", 1, "teacher2.png", "teacher2.com","teacher6", passwordEncode.encode("teacher6"), teacherroles);
-			User teacher7 = new User((long) 9,"GV007", "teacher7", new Date(), "BL", "0000", 1, "teacher1.png", "teacher1@gmail.com","teacher7", passwordEncode.encode("teacher7"), teacherroles);
-			User teacher8 = new User((long) 10,"GV008", "teacher8", new Date(), "BL", "0000", 1, "teacher2.png", "teacher2.com","teacher8", passwordEncode.encode("teacher8"), teacherroles);
-			User teacher9 = new User((long) 11,"GV009", "teacher9", new Date(), "BL", "0000", 1, "teacher1.png", "teacher1@gmail.com","teacher9", passwordEncode.encode("teacher9"), teacherroles);
-			User teacher10 = new User((long) 12,"GV010", "teacher10", new Date(), "BL", "0000", 1, "teacher2.png", "teacher2.com","teacher10", passwordEncode.encode("teacher10"), teacherroles);
+			User admin = new User((long) 1,"AD001", "admin",  LocalDate.now(), "BL", "0000", 1, "admin.png", "admin@gmail.com","admin", passwordEncode.encode("admin"), adminroles);
+			User user = new User((long) 2,"", "user", LocalDate.now(), "BL", "0000", 1, "user.png", "user@gmail.com","user", passwordEncode.encode("user"), userroles);
+			User teacher1 = new User((long) 3,"GV001", "teacher1", LocalDate.now(), "BL", "0000", 1, "teacher1.png", "teacher1@gmail.com","teacher1", passwordEncode.encode("teacher1"), teacherroles);
+			User teacher2 = new User((long) 4,"GV002", "teacher2", LocalDate.now(), "BL", "0000", 1, "teacher2.png", "teacher2.com","teacher2", passwordEncode.encode("teacher2"), teacherroles);
+			User teacher3 = new User((long) 5,"GV003", "teacher3", LocalDate.now(), "BL", "0000", 1, "teacher1.png", "teacher1@gmail.com","teacher3", passwordEncode.encode("teacher3"), teacherroles);
+			User teacher4 = new User((long) 6,"GV004", "teacher4", LocalDate.now(), "BL", "0000", 1, "teacher2.png", "teacher2.com","teacher4", passwordEncode.encode("teacher4"), teacherroles);
+			User teacher5 = new User((long) 7,"GV005", "teacher5", LocalDate.now(), "BL", "0000", 1, "teacher1.png", "teacher1@gmail.com","teacher5", passwordEncode.encode("teacher5"), teacherroles);
+			User teacher6 = new User((long) 8,"GV006", "teacher6", LocalDate.now(), "BL", "0000", 1, "teacher2.png", "teacher2.com","teacher6", passwordEncode.encode("teacher6"), teacherroles);
+			User teacher7 = new User((long) 9,"GV007", "teacher7", LocalDate.now(), "BL", "0000", 1, "teacher1.png", "teacher1@gmail.com","teacher7", passwordEncode.encode("teacher7"), teacherroles);
+			User teacher8 = new User((long) 10,"GV008", "teacher8", LocalDate.now(), "BL", "0000", 1, "teacher2.png", "teacher2.com","teacher8", passwordEncode.encode("teacher8"), teacherroles);
+			User teacher9 = new User((long) 11,"GV009", "teacher9", LocalDate.now(), "BL", "0000", 1, "teacher1.png", "teacher1@gmail.com","teacher9", passwordEncode.encode("teacher9"), teacherroles);
+			User teacher10 = new User((long) 12,"GV010", "teacher10", LocalDate.now(), "BL", "0000", 1, "teacher2.png", "teacher2.com","teacher10", passwordEncode.encode("teacher10"), teacherroles);
 
 			userRepository.save(admin);
 			userRepository.save(user);

@@ -1,9 +1,15 @@
 package com.NLNganh.service;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.NLNganh.dto.AuthRequestDTO;
 import com.NLNganh.dto.JwtReponseDTO;
 import com.NLNganh.dto.UserDTO;
+
 import com.NLNganh.models.Role;
 import com.NLNganh.models.User;
 import com.NLNganh.repository.RoleRepository;
@@ -58,6 +65,28 @@ public class UserServiceImpl implements UserService {
 	    return teachers.stream()
 	            .map(this::mapUsertoUserDTO)
 	            .collect(Collectors.toList());
+	}
+	
+	private final String IMAGE_DIRECTORY = "src/main/resources/static/assets/img/";
+
+	@Override
+	public Resource getImageMainUrlFromUser(Long userid) {
+		Optional<User> user = userRepossitory.findById(userid);
+		if(user.isPresent()) {
+			Path imagePath = Paths.get(IMAGE_DIRECTORY + user.get().getImage());
+			if(!Files.exists(imagePath)) {
+				imagePath = Paths.get(IMAGE_DIRECTORY + "anhdaidien.png");
+			}
+			try {
+					Resource resource = new UrlResource(imagePath.toUri());
+		        return resource;
+			}catch(Exception e) {
+				return null;
+			}
+	        
+		}else {
+			return null;
+		}
 	}
 	
 }

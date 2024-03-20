@@ -1,6 +1,6 @@
 package com.NLNganh.models;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,7 +30,7 @@ public class User {
 	@Column(name = "fullname" , nullable =false , length =40)
 	private String fullName;
 	
-	private Date birthday;
+	private LocalDate birthday;
 	
 	private String address;
 	
@@ -70,10 +70,25 @@ public class User {
 		super();
 	}
 
-	public User(Long id,String maSo,String fullName, Date birthday, String address, String phoneNumber, int sex, String image,
+	public User(Long id,String maSo,String fullName, LocalDate birthday, String address, String phoneNumber, int sex, String image,
 			String email,String username, String password, Set<Role> roles) {
 		super();
 		this.id = id;
+		this.maSo = maSo;
+		this.fullName = fullName;
+		this.birthday = birthday;
+		this.address = address;
+		this.phoneNumber = phoneNumber;
+		this.sex = sex;
+		this.image = image;
+		this.email = email;
+		this.username = username;
+		this.password = password;
+		this.roles = roles;
+	}
+	public User(String maSo,String fullName, LocalDate birthday, String address, String phoneNumber, int sex, String image,
+			String email,String username, String password, Set<Role> roles) {
+		super();
 		this.maSo = maSo;
 		this.fullName = fullName;
 		this.birthday = birthday;
@@ -111,11 +126,11 @@ public class User {
 		this.fullName = fullName;
 	}
 
-	public Date getBirthday() {
+	public LocalDate getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(Date birthday) {
+	public void setBirthday(LocalDate birthday) {
 		this.birthday = birthday;
 	}
 

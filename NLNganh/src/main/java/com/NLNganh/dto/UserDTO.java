@@ -1,8 +1,11 @@
 package com.NLNganh.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.NLNganh.models.Role;
+import com.NLNganh.models.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class UserDTO {
@@ -12,7 +15,7 @@ public class UserDTO {
 	
 	private String fullName;
 	
-	private Date birthday;
+	private LocalDate birthday;
 	
 	private String address;
 	
@@ -33,7 +36,7 @@ public class UserDTO {
 		super();
 	}
 
-	public UserDTO(Long id,String maSo,String fullName, Date birthday, String address, String phoneNumber, int sex, String image,
+	public UserDTO(Long id,String maSo,String fullName, LocalDate birthday, String address, String phoneNumber, int sex, String image,
 			String email,String password, List<String> roles) {
 		super();
 		this.id = id;
@@ -48,6 +51,11 @@ public class UserDTO {
 		this.password = password;
 		this.roles = roles;
 	}
+	
+	public static UserDTO mapUsertoUserDTO(User user) {
+        return new UserDTO(user.getId(),user.getMaSo(),user.getFullName(), user.getBirthday(), user.getAddress(), user.getPhoneNumber(), user.getSex()
+        		, user.getImage(), user.getEmail(), null, user.getRoles().stream().map(Role::getName).collect(Collectors.toList()));
+    }
 	
 
 	public Long getId() {
@@ -74,11 +82,11 @@ public class UserDTO {
 		this.fullName = fullName;
 	}
 
-	public Date getBirthday() {
+	public LocalDate getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(Date birthday) {
+	public void setBirthday(LocalDate birthday) {
 		this.birthday = birthday;
 	}
 

@@ -5,8 +5,8 @@ import { Fragment } from 'react';
 import DefaultLayout from './Admin/component/layout/defaultlayout/DefaultLayout';
 import HearderAndFooter from './User/Layout/HeaderAndFooter/Index';
 import Gototop from './Component/GoToTop/Index';
-import HostLine from './Component/HostLine/Index';
-import Chat from './Component/Chat/Index';
+// import HostLine from './Component/HostLine/Index';
+// import Chat from './Component/Chat/Index';
 import { ToastContainer } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { authUser } from './redux/selectors';
@@ -52,12 +52,12 @@ function App() {
                     </Routes>
                 </div>
             </Router>
-            {window.location.pathname.startsWith('/admin') || window.location.pathname === '/login' ? null : (
+            {/* {window.location.pathname.startsWith('/admin') || window.location.pathname === '/login' ? null : (
                 <>
                     <Chat />
                     <HostLine />
                 </>
-            )}
+            )} */}
             <Gototop />
 
             <ToastContainer
