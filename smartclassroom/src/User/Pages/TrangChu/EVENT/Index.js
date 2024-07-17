@@ -14,24 +14,16 @@ function Index() {
             title: 'Giải Bóng Đá Nam Tại Trường',
         },
         {
-            img: Img,
-            title: 'Giải Bóng Đá Nam Tại Trường',
+            img: 'https://thptvietau.edu.vn/wp-content/uploads/2023/02/PNT2283.webp',
+            title: 'Hoạt động ngoại khoá',
         },
         {
-            img: Img,
-            title: 'Giải Bóng Đá Nam Tại Trường',
+            img: 'https://thptvietau.edu.vn/wp-content/uploads/2023/04/1.1.-Huong-nghiep-cho-con-tu-som.jpg',
+            title: 'Ngay hoi viec lam',
         },
         {
-            img: Img,
-            title: 'Giải Bóng Đá Nam Tại Trường',
-        },
-        {
-            img: Img,
-            title: 'Giải Bóng Đá Nam Tại Trường',
-        },
-        {
-            img: Img,
-            title: 'Giải Bóng Đá Nam Tại Trường',
+            img: 'https://thptvietau.edu.vn/wp-content/uploads/2023/02/TOAN2844.webp#main',
+            title: 'Vui choi 26/3',
         },
     ];
     return (

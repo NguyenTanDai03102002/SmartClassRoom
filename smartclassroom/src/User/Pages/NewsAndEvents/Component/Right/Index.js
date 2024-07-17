@@ -13,16 +13,10 @@ function Index({ data }) {
             img: Img,
         },
         {
-            img: Img,
+            img: 'https://thptvietau.edu.vn/wp-content/uploads/2023/04/1.1.-Mot-trong-nhung-chi-tieu-xet-tuyen-dai-hoc.jpg',
         },
         {
-            img: Img,
-        },
-        {
-            img: Img,
-        },
-        {
-            img: Img,
+            img: 'https://thptvietau.edu.vn/wp-content/uploads/2023/04/1.3.-Tao-nhieu-co-hoi-viec-lam-quoc-te.jpg',
         },
         {
             img: Img,

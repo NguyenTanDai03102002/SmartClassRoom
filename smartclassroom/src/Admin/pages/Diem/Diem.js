@@ -6,18 +6,14 @@ import Header from './header/Index';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Button from '../../../Component/button/Button';
-import Seach from '../../component/seach/Seach';
+import Seach from '../../../Component/seach/Seach';
 
 const cx = classNames.bind(Styles);
 
 function Diem() {
     return (
         <div className={cx('wrapper')}>
-            <div className={cx('class-teacher')}>
-                <span> Đây là lớp : </span>
-                <span> Giáo Viên chủ nhiệm : </span>
-            </div>
-            <Seach />
+            <Seach placeholder="Nhập mã số học sinh" />
 
             <Header />
             <Button control>

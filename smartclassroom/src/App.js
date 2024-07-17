@@ -39,7 +39,9 @@ function App() {
                                         <Layout>
                                             {item.requireAuth && !user ? (
                                                 <Navigate to="/login" />
-                                            ) : item.path.startsWith('/admin') && !user.roles.includes('ADMIN') ? (
+                                            ) : item.path.startsWith('/admin') &&
+                                              !user.roles.includes('ADMIN') &&
+                                              !user.roles.includes('TEACHER') ? (
                                                 <Navigate to="/" />
                                             ) : (
                                                 <item.Component />

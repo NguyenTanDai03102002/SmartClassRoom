@@ -1,7 +1,6 @@
 import React from 'react';
 import classNames from 'classnames/bind';
 import Styles from './paginate.module.scss';
-import Button from '../button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 
@@ -10,10 +9,7 @@ const cx = classNames.bind(Styles);
 function Paginate({ totalPages, currentPage, setCurrentPage }) {
     let pages = [];
 
-    let startPage = Math.max(0, currentPage - 1);
-    let endPage = Math.min(startPage + 2, totalPages - 1);
-
-    for (let i = startPage; i <= endPage; i++) {
+    for (let i = 0; i < totalPages; i++) {
         pages.push(i);
     }
     const handleprev = () => {
@@ -37,26 +33,26 @@ function Paginate({ totalPages, currentPage, setCurrentPage }) {
                         className={cx('move-icon', { disabled: currentPage === 0 })}
                     />
                 </div>
-                <div className={cx('pages')}>
-                    {currentPage >= totalPages - 2 && totalPages > 3 && <span className={cx('vv')}>. . .</span>}
-                    {pages.map((page, index) => (
-                        <Button
-                            className={cx('page-btn', { active: page === currentPage })}
-                            key={index}
-                            onClick={() => {
-                                setCurrentPage(page);
-                            }}
-                        >
-                            {page + 1}
-                        </Button>
-                    ))}
-                    {currentPage <= 1 && totalPages > 3 && <span className={cx('vv')}>. . .</span>}
-                </div>
                 <div className={cx('move')}>
                     <FontAwesomeIcon
                         icon={faAngleRight}
                         onClick={handleNext}
                         className={cx('move-icon', { disabled: currentPage === totalPages - 1 })}
+                    />
+                </div>
+                <div className={cx('pageoftotal')}>
+                    Page {currentPage + 1} of {totalPages}
+                </div>
+                <div className={cx('gottopage')}>
+                    <span>Go to page: </span>
+                    <input
+                        type="number"
+                        onChange={(e) => {
+                            const value = parseInt(e.target.value);
+                            if (value >= 1 && value <= totalPages) {
+                                setCurrentPage(value - 1);
+                            }
+                        }}
                     />
                 </div>
             </div>

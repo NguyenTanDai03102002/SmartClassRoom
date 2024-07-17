@@ -36,3 +36,19 @@
 .a {
     color: red;
 }
+
+.btn {
+    margin-top: 10px;
+    font-size: 1.6rem;
+    padding: 10px;
+    background-color: #3498db;
+    color: var(--white-color);
+    border-radius: 10px;
+    cursor: pointer;
+    + .btn {
+        margin-left: 12px;
+    }
+    &:hover {
+        background-color: #128ad9;
+    }
+}

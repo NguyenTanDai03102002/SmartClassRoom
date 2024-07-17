@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDeleteLeft, faEdit, faEllipsisVertical, faUser } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames/bind';
@@ -11,25 +11,45 @@ import { userToken } from '../../../../redux/selectors';
 
 const cx = classNames.bind(Styles);
 
-function StudentTable({ dataStudents, idlop, keyword }) {
-    const { getallstudentsofclass, deleteUserfromClass } = useHandleDispatch();
+function StudentTable({
+    dataStudents,
+    idlop,
+    keyword,
+    currentPage,
+    setCurrentPage,
+    setShowModal,
+    setEditting,
+    setDataHS,
+}) {
+    const { getallstudentsofclass, deleteUserfromClass, getImageOfUser } = useHandleDispatch();
     const totalPages = useSelector((state) => state.student.totalPages);
+    // const pageNumber = useSelector((state) => state.student.pageNumber);
     const token = useSelector(userToken);
-    const [currentPage, setCurrentPage] = useState(0);
+    const loading = useSelector((state) => state.student.loading);
+    // console.log(currentPage);
 
     useEffect(() => {
-        getallstudentsofclass(idlop, currentPage, null, null);
+        if (keyword) {
+            getallstudentsofclass(idlop, currentPage, null, keyword);
+        } else {
+            getallstudentsofclass(idlop, currentPage, null, null);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage]);
 
     const handleDelete = (id) => {
-        deleteUserfromClass(id, idlop, token, currentPage, keyword);
+        deleteUserfromClass(id, idlop, token, currentPage, keyword, setCurrentPage);
     };
-    const handleEdit = (id) => {
-        console.log(id);
+    const handleEdit = async (id) => {
+        setShowModal(true);
+        setEditting(true);
+        const userEdit = dataStudents.find((item) => item.id === id);
+        const res = await getImageOfUser(userEdit);
+        setDataHS({ ...userEdit, image: res });
     };
     const handleDetail = (id) => {
-        console.log(id);
+        // const userDetail = dataStudents.find((item) => item.id === id);
+        // console.log(userDetail)
     };
 
     const getMenuItems = (id) => [
@@ -70,7 +90,7 @@ function StudentTable({ dataStudents, idlop, keyword }) {
         );
     });
     return (
-        <>
+        <div className={cx('wrapper', { wrappernodata: dataStudents.length <= 0 })}>
             <table className={cx('list-table')}>
                 <thead className={cx('table-header')}>
                     <tr>
@@ -84,12 +104,12 @@ function StudentTable({ dataStudents, idlop, keyword }) {
                 </thead>
                 <tbody className={cx('table-content')}>{tablecontent}</tbody>
             </table>
-            {dataStudents.length > 0 ? (
+
+            {!loading && dataStudents.length <= 0 && <div className={cx('nodata')}>KHÔNG CÓ DỮ LIỆU</div>}
+            {dataStudents.length > 0 && (
                 <Paginate totalPages={totalPages} currentPage={currentPage} setCurrentPage={setCurrentPage} />
-            ) : (
-                <div className={cx('nodata')}>không có dữ liệu</div>
             )}
-        </>
+        </div>
     );
 }
 

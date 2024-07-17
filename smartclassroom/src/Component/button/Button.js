@@ -12,6 +12,7 @@ function Button({
     func = false,
     iconPosition = false,
     control = false,
+    btn = false,
     children,
     onClick,
     ...passProps
@@ -36,6 +37,7 @@ function Button({
         func,
         control,
         iconPosition,
+        btn,
     });
 
     return (

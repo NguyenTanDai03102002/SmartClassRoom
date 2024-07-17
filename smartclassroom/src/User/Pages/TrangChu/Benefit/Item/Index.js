@@ -6,7 +6,7 @@ import Img2 from '../../../../Component/Assets/Img/benefit-2.png';
 import Img3 from '../../../../Component/Assets/Img/benefit-3.png';
 import Img4 from '../../../../Component/Assets/Img/benefit-4.png';
 import Img5 from '../../../../Component/Assets/Img/benefit-5.png';
-import Img6 from '../../../../Component/Assets/Img/benefit-5.png';
+import Img6 from '../../../../Component/Assets/Img/img7.jpg';
 
 const cx = classNames.bind(Styles);
 

@@ -6,6 +6,10 @@ import DefaultLayout from '../Admin/component/layout/defaultlayout/DefaultLayout
 import Diem from '../Admin/pages/Diem/Diem';
 import Home from '../Admin/pages/TrangChu/Index';
 import Xepchunhiem from '../Admin/pages/XepChuNhiem/Index';
+import XepGiangDay from '../Admin/pages/XepGiangDay/Index';
+import XepGiangDayClass from '../Admin/pages/XepGiangDay/Class/Index';
+import XemGiangDay from '../Admin/pages/XemLichGiangDay/Index';
+import GiaoVien from '../Admin/pages/GiaoVien/Index';
 
 // user
 import HearderAndFooter from '../User/Layout/HeaderAndFooter/Index';
@@ -44,7 +48,12 @@ const pageRoutes = [
     { path: '/admin/khoi/:idkhoi/lop', Component: Lop, layout: Headeronly, requireAuth: true },
     { path: '/admin/khoi/:idkhoi/lop/:idlop/hocsinh', Component: Hocsinh, layout: DefaultLayout, requireAuth: true },
     { path: '/admin/khoi/:idkhoi/lop/:idlop/diem', Component: Diem, layout: DefaultLayout, requireAuth: true },
+    { path: '/admin/quan-ly-giao-vien', Component: GiaoVien, layout: Headeronly, requireAuth: true },
     { path: '/admin/xep-lich-chu-nhiem', Component: Xepchunhiem, layout: Headeronly, requireAuth: true },
+    { path: '/admin/xep-lich-Giang-Day', Component: XepGiangDay, layout: Headeronly, requireAuth: true },
+    { path: '/admin/xep-lich-Giang-Day/:classid', Component: XepGiangDayClass, layout: Headeronly, requireAuth: true },
+    { path: '/admin/xem-lich-Giang-Day', Component: XemGiangDay, layout: Headeronly, requireAuth: true },
+
     // { path: '/admin/hocsinh/:id', Component: Chitiet, layout: DefaultLayout },
 ];
 

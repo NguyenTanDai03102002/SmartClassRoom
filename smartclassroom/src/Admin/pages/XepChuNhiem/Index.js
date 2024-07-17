@@ -9,7 +9,7 @@ import { Classes, Teachers, userToken } from '../../../redux/selectors';
 const cx = classNames.bind(Styles);
 
 function Index() {
-    const { fecthClasses, fetchTeachers, putteacherstoclasses } = useHandleDispatch();
+    const { fecthClasses, putteacherstoclasses, fetchTeachers } = useHandleDispatch();
     const classes = useSelector(Classes);
     const token = useSelector(userToken);
     const teachers = useSelector(Teachers);
@@ -17,11 +17,13 @@ function Index() {
     const [finish, setFinish] = useState(false);
     const [editing, setEditing] = useState(false);
     const [editingTeacherID, setEditingTeacherID] = useState(null);
-    // const [selectedUpdate, setSelectedUpdate] = useState([]);
 
     useEffect(() => {
-        fecthClasses();
-        fetchTeachers(token);
+        const get = async () => {
+            fecthClasses();
+            fetchTeachers(token);
+        };
+        get();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -120,15 +122,6 @@ function Index() {
                                                 {option.maSo} - {option.fullName}
                                             </option>
                                         ))}
-                                        {/* {selectedTeacherForClass && (
-                                            <option
-                                                // key={selectedTeacherForClass.teacherId}
-                                                // value={selectedTeacherForClass.teacherId}
-                                                hidden
-                                            >
-                                                {getTeacherName(selectedTeacherForClass.teacherId)}
-                                            </option>
-                                        )} */}
                                     </select>
                                     <Button className={cx('btn')} onClick={handleSubmitAddTeachers}>
                                         Lưu

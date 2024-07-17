@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import Styles from './Lop.module.scss';
 import Button from '../../../Component/button/Button';
+import anhmacdinh from '../../../Component/Image/anhdaidien.png';
 import { useSelector } from 'react-redux';
 import { Classes } from '../../../redux/selectors';
 import { useParams } from 'react-router-dom';
@@ -13,7 +14,8 @@ function Lop() {
     const { fecthClasses, getImageOfUser } = useHandleDispatch();
     const classes = useSelector(Classes);
     const { idkhoi } = useParams();
-    const [teacherImages, setTeacherImages] = useState({});
+    const [teacherImages, setTeacherImages] = useState([]);
+    // console.log(teacherImages[0].url);
 
     useEffect(() => {
         fecthClasses(null, idkhoi);
@@ -22,20 +24,22 @@ function Lop() {
 
     useEffect(() => {
         const fetchTeacherImages = async () => {
-            const images = {};
-            for (const item of classes) {
-                if (item.teacher && !teacherImages[item.teacher.id]) {
+            const teacherImageMap = {};
+            await Promise.all(
+                classes.map(async (item) => {
                     const imageUrl = await getImageOfUser(item.teacher);
-                    images[item.teacher.id] = imageUrl;
-                }
-            }
-            setTeacherImages(images);
+                    if (item.teacher && item.teacher.id) {
+                        teacherImageMap[item.teacher.id] = { data: imageUrl.data, url: imageUrl.config.url };
+                    }
+                }),
+            );
+            console.log(teacherImageMap);
+            setTeacherImages(teacherImageMap);
         };
 
         fetchTeacherImages();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [classes]);
-
     return (
         <div className={cx('wrapper')}>
             <h1>CHỌN LỚP CẦN QUẢN LÝ</h1>
@@ -47,10 +51,14 @@ function Lop() {
                             Giáo viên cố vấn :{' '}
                             {item.teacher && item.teacher.fullName ? item.teacher.fullName : 'Không có'}
                         </div>
-                        {item.teacher && teacherImages[item.teacher.id] && (
+                        {item.teacher && (
                             <img
                                 className={cx('image')}
-                                src={item.teacher && teacherImages[item.teacher.id]}
+                                src={
+                                    teacherImages[item.teacher.id] && teacherImages[item.teacher.id].data
+                                        ? teacherImages[item.teacher.id].url
+                                        : anhmacdinh
+                                }
                                 alt="anh"
                             />
                         )}

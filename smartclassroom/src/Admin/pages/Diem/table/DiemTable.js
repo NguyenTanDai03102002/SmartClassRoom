@@ -8,35 +8,33 @@ import Button from '../../../../Component/button/Button';
 
 const cx = classNames.bind(Styles);
 
-function DiemTable({ filteredData, mapIdToMSHS }) {
-    const [currentPage, setCurrentPage] = useState(1);
-    const postsPerPage = 5;
-
-    const lastPostIndex = currentPage * postsPerPage;
-    const fisrtPostIndex = lastPostIndex - postsPerPage;
-
-    const currentPost = filteredData.slice(fisrtPostIndex, lastPostIndex);
+function DiemTable() {
+    const currentPost = [1, 2, 3, 4];
     const tableheader = (
         <tr>
             <th className={cx('thstyles')}>Mã HS</th>
-            <th className={cx('thstyles')}>Điểm Miệng</th>
-            <th className={cx('thstyles')}>Điểm 15p</th>
-            <th className={cx('thstyles')}>Điểm 1 Tiết Lần 1</th>
-            <th className={cx('thstyles')}>Điểm 1 Tiết Lần 2</th>
-            <th className={cx('thstyles')}>Điểm HK</th>
-            <th className={cx('thstyles')}>Điểm TB</th>
+            <th className={cx('thstyles')}>Miệng</th>
+            <th className={cx('thstyles')}>15p 1</th>
+            <th className={cx('thstyles')}>15p 2</th>
+            <th className={cx('thstyles')}>15p 3</th>
+            <th className={cx('thstyles')}>1 Tiết 1</th>
+            <th className={cx('thstyles')}>1 Tiết 2</th>
+            <th className={cx('thstyles')}>HK</th>
+            <th className={cx('thstyles')}>TB</th>
             <th className={cx('thstyles')}>Thao tác</th>
         </tr>
     );
     const tablecontent = currentPost.map((item) => (
-        <tr key={item.id} className={cx('table-row')}>
-            <td className={cx('tdstyles')}>{mapIdToMSHS(item.IdMSHS)}</td>
-            <td className={cx('tdstyles')}>{item.diemMieng}</td>
-            <td className={cx('tdstyles')}>{item.diem15p}</td>
-            <td className={cx('tdstyles')}>{item.diem1tietlan1}</td>
-            <td className={cx('tdstyles')}>{item.diem1tietlan2}</td>
-            <td className={cx('tdstyles')}>{item.diemhk}</td>
-            <td className={cx('tdstyles')}>{item.diemTB}</td>
+        <tr key={item} className={cx('table-row')}>
+            <td className={cx('tdstyles')}></td>
+            <td className={cx('tdstyles')}></td>
+            <td className={cx('tdstyles')}></td>
+            <td className={cx('tdstyles')}></td>
+            <td className={cx('tdstyles')}></td>
+            <td className={cx('tdstyles')}></td>
+            <td className={cx('tdstyles')}></td>
+            <td className={cx('tdstyles')}></td>
+            <td className={cx('tdstyles')}></td>
             <td className={cx('tdstyles')}>
                 <Button control>
                     <FontAwesomeIcon icon={faTrashCan} />
@@ -53,16 +51,7 @@ function DiemTable({ filteredData, mapIdToMSHS }) {
                 <thead className={cx('table-header')}>{tableheader}</thead>
                 <tbody className={cx('table-content')}>{tablecontent}</tbody>
             </table>
-            {currentPost.length !== 0 ? (
-                <Paginate
-                    totalPage={filteredData.length}
-                    postsPerPage={postsPerPage}
-                    currentPage={currentPage}
-                    setCurrentPage={setCurrentPage}
-                />
-            ) : (
-                <div className={cx('nodata')}>Không Tìm Thấy dữ liệu</div>
-            )}
+            <Paginate /> <div className={cx('nodata')}>Không Tìm Thấy dữ liệu</div>
         </div>
     );
 }

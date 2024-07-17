@@ -11,3 +11,13 @@ export const Classes = (state) => state.class.classes;
 export const Teachers = (state) => state.teacher.teachers;
 
 export const Students = (state) => state.student.students;
+
+export const PageNumber = (state) => state.student.pageNumber;
+
+export const dataexcel = (state) => state.excel.dataExcel;
+
+export const loadingExcel = (state) => state.excel.loading;
+
+export const Subjects = (state) => state.subject.subjects;
+
+export const Teachs = (state) => state.teach.teachs;

@@ -5,12 +5,13 @@ import Styles from './login.module.scss';
 import { toast } from 'react-toastify';
 import { authLoading } from '../../redux/selectors';
 import { useHandleDispatch } from '../../services/useHandleDispatch';
+import Loading from '../Loading/Index';
 
 const cx = classNames.bind(Styles);
 
 function Login2() {
     const [datalogin, setDatalogin] = useState({
-        username: '',
+        maSo: '',
         password: '',
     });
 
@@ -27,7 +28,7 @@ function Login2() {
     };
     const handleSubmitClick = (e) => {
         e.preventDefault();
-        if (datalogin.username.trim() === '') {
+        if (datalogin.maSo.trim() === '') {
             usernameInputRef.current.focus();
             toast.warn('Bạn phải nhập đầy đủ thông tin');
             return;
@@ -46,25 +47,16 @@ function Login2() {
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
                 <div className={cx('title')}>Đăng nhập</div>
-                {loading && (
-                    <div className={cx('loading')}>
-                        <div>Loading</div>
-                        <div className={cx('dot-container')}>
-                            <div className={cx('dot')}></div>
-                            <div className={cx('dot')}></div>
-                            <div className={cx('dot')}></div>
-                        </div>
-                    </div>
-                )}
+                {loading && <Loading />}
 
                 <form>
                     <input
                         type="text"
-                        value={datalogin.username}
-                        name="username"
+                        value={datalogin.maSo}
+                        name="maSo"
                         ref={usernameInputRef}
                         onChange={(e) => handleChange(e)}
-                        placeholder="nhập username"
+                        placeholder="nhập maSo"
                     />
                     <input
                         type="password"

@@ -25,6 +25,15 @@ function Index() {
                 <Button className={cx('item')} to="/admin/xep-lich-chu-nhiem">
                     xếp lịch chủ nhiệm
                 </Button>
+                <Button className={cx('item')} to="/admin/quan-ly-giao-vien">
+                    Quản lý giáo viên
+                </Button>
+                <Button className={cx('item')} to="/admin/xep-lich-Giang-Day">
+                    Xếp lịch giảng dạy
+                </Button>
+                <Button className={cx('item')} to="/admin/xem-lich-Giang-Day">
+                    Lịch Giảng Dạy
+                </Button>
             </div>
         </div>
     );
