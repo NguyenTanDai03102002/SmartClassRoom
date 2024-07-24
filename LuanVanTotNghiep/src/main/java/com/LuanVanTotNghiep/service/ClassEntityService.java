@@ -2,6 +2,7 @@ package com.LuanVanTotNghiep.service;
 
 import java.util.List;
 
+import com.LuanVanTotNghiep.dto.response.ApiResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,7 @@ import com.LuanVanTotNghiep.dto.response.ClassEntityResponse;
 import com.LuanVanTotNghiep.dto.request.TeacherClassRequest;
 import com.LuanVanTotNghiep.dto.response.UserResponse;
 
-public interface ClassService {
+public interface ClassEntityService {
 
 	List<ClassEntityResponse> getClassesByYearAndBlock(Integer year, Long khoiid);
 
@@ -28,4 +29,5 @@ public interface ClassService {
 	List<UserResponse> getStudentsnopage(Long classid);
 
 
+	ApiResponse<List<ClassEntityResponse>> getAllByYear(Long yearId);
 }

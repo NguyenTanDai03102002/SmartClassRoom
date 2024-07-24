@@ -1,0 +1,58 @@
+.wrapper {
+    margin-top: 40px;
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .select-option {
+            margin-bottom: 10px;
+        }
+        .add {
+            font-size: 1.6rem;
+            color: #3498db;
+            border: 1px solid #3498db;
+            padding: 4px 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    }
+    .table {
+        .title {
+            font-size: 3rem;
+            font-weight: 600;
+        }
+        .label {
+            font-size: 2rem;
+        }
+
+        .no-data-message {
+            font-size: 2rem;
+            color: red;
+        }
+        .datarow {
+            font-size: 1.6rem;
+        }
+    }
+
+    .actions {
+        display: flex;
+        justify-content: center;
+        .edit {
+            cursor: pointer;
+            margin-right: 10px;
+            padding: 0 2px;
+            color: rgb(7, 149, 71);
+        }
+        .delete {
+            cursor: pointer;
+            padding: 0 2px;
+            color: rgb(251, 69, 69);
+        }
+    }
+
+    .modal {
+        .button {
+            text-align: center;
+        }
+    }
+}

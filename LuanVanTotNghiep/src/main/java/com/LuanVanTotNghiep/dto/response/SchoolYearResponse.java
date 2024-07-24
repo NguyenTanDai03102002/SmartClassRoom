@@ -8,8 +8,8 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class YearResponse {
+public class SchoolYearResponse {
 	 Long id;
-	 int SchoolYear;
+	 int schoolYear;
 
 }

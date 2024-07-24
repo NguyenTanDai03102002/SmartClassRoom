@@ -2,10 +2,7 @@ package com.LuanVanTotNghiep.models;
 
 import java.util.Date;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,6 +16,8 @@ import jakarta.persistence.ManyToOne;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(exclude = {"subject","category","academicResult"})
+@ToString(exclude = {"subject","category","academicResult"})
 @Entity
 public class Score {
 	

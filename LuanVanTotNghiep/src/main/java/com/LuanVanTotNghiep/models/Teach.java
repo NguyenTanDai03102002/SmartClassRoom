@@ -5,15 +5,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(exclude = {"lessons","user","subject","classEntity","schoolYear"})
+@ToString(exclude = {"lessons","user","subject","classEntity","schoolYear"})
 @Entity
 public class Teach {
 	@Id

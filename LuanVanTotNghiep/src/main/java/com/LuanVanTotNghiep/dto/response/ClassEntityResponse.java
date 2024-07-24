@@ -11,8 +11,8 @@ import lombok.experimental.FieldDefaults;
 public class ClassEntityResponse {
 	 Long id;
      String name;
-     GradeResponse blockName;
-     UserResponse teacher;
-     int year;
+     GradeResponse grade;
+     UserResponse classTeacher;
+     SchoolYearResponse schoolYear;
 
 }

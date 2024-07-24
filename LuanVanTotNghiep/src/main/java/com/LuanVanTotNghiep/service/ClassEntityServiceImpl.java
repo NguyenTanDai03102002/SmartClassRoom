@@ -12,6 +12,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.LuanVanTotNghiep.Exception.AppException;
+import com.LuanVanTotNghiep.Exception.ErrorCode;
+import com.LuanVanTotNghiep.Mapper.ClassEntityMapper;
+import com.LuanVanTotNghiep.dto.response.ApiResponse;
 import com.LuanVanTotNghiep.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,13 +37,13 @@ import com.LuanVanTotNghiep.models.User;
 import com.LuanVanTotNghiep.models.SchoolYear;
 
 @Service
-public class ClassServiceImpl implements ClassService {
+public class ClassEntityServiceImpl implements ClassEntityService {
 	
 	@Autowired 
-	private ClassRepository classRepository;
+	private ClassEntityRepository classEntityRepository;
 	
 	@Autowired 
-	private YearRepository yearRepository;
+	private SchoolYearRepository schoolYearRepository;
 	
 	@Autowired 
 	private GradeRepository gradeRepository;
@@ -50,25 +54,40 @@ public class ClassServiceImpl implements ClassService {
     @Autowired
     private UserRepository userRepository;
 
+	@Autowired
+	private ClassEntityMapper classEntityMapper;
+
     PasswordEncoder passwordEncode =new BCryptPasswordEncoder(10);
     
     private final String IMAGE_DIRECTORY = "src/main/resources/static/assets/img/";
+
+	@Override
+	public ApiResponse<List<ClassEntityResponse>> getAllByYear(Long yearId) {
+		SchoolYear schoolYear = schoolYearRepository.findById(yearId).orElseThrow(() -> new AppException(ErrorCode.YEAR_NOT_EXISTED));
+		List<ClassEntity> classEntityList = classEntityRepository.findBySchoolYear(schoolYear);
+		List<ClassEntityResponse> classEntityResponseList = classEntityList.stream()
+				.map(classEntity -> classEntityMapper.toClassEntityResponse(classEntity))
+				.toList();
+		return ApiResponse.<List<ClassEntityResponse>>builder()
+				.result(classEntityResponseList)
+				.build();
+	}
     
 	@Override
 	public List<ClassEntityResponse> getClassesByYearAndBlock(Integer year, Long khoid) {
 		int y = (year != null) ? year : LocalDate.now().getYear();
-		SchoolYear targetSchoolYear = yearRepository.findBySchoolYear(y);
+		SchoolYear targetSchoolYear = schoolYearRepository.findBySchoolYear(y);
 		List<ClassEntity> classEntities;
 		if(khoid != null) {
 			Optional<Grade> khoi = gradeRepository.findById(khoid);
 			if(khoi.isPresent()) {
 				Grade targetGrade = khoi.get();
-				classEntities = classRepository.findBySchoolYearAndGrade(targetSchoolYear, targetGrade);
+				classEntities = classEntityRepository.findBySchoolYearAndGrade(targetSchoolYear, targetGrade);
 			}else {
 				return null;
 			}
 		}else {
-			classEntities = classRepository.findBySchoolYear(targetSchoolYear);
+			classEntities = classEntityRepository.findBySchoolYear(targetSchoolYear);
 		}
 		
 		return classEntities.stream()
@@ -92,11 +111,11 @@ public class ClassServiceImpl implements ClassService {
 			Optional<User> teacherOptional = userRepository.findById(request.getTeacherId());
 			User teacher = teacherOptional.get();
 			
-			Optional<ClassEntity> classOptional = classRepository.findById(request.getClassId());
+			Optional<ClassEntity> classOptional = classEntityRepository.findById(request.getClassId());
 			ClassEntity classEntity = classOptional.get();
 			
 			classEntity.setTeacher(teacher);
-			classRepository.save(classEntity);
+			classEntityRepository.save(classEntity);
 			
 		}
 		return getClassesByYearAndBlock(null,null);
@@ -107,7 +126,7 @@ public class ClassServiceImpl implements ClassService {
 	
 	@Override
 	public ResponseEntity<?> importexcel(Long classid,List<UserResponse> requests) {
-		Optional<ClassEntity> lop = classRepository.findById(classid);
+		Optional<ClassEntity> lop = classEntityRepository.findById(classid);
 		if (!lop.isPresent()) {
 	        return null;
 	    }
@@ -138,13 +157,13 @@ public class ClassServiceImpl implements ClassService {
 //			lop.get().getUsers().add(user);
 //			user.getClassEntity().add(lop.get());
 		}
-		classRepository.save(lop.get());
+		classEntityRepository.save(lop.get());
 		return ResponseEntity.ok().build();
 	}
 
 	@Override
 	public Page<UserResponse> getallstudentsofclass(Long classid, Pageable pageable, String keyword) {
-		Optional<ClassEntity> ClassEntity = classRepository.findById(classid);
+		Optional<ClassEntity> ClassEntity = classEntityRepository.findById(classid);
 		if(ClassEntity.isPresent()) {
 			ClassEntity classEntity = ClassEntity.get();
 			Page<User> students;
@@ -166,7 +185,7 @@ public class ClassServiceImpl implements ClassService {
 
 	@Override
 	public ResponseEntity<?> deleteuserclass(Long userid, Long classid) {
-		ClassEntity classEntity = classRepository.findById(classid).get();
+		ClassEntity classEntity = classEntityRepository.findById(classid).get();
 		User user = userRepository.findById(userid).get();
 //		user.getClassEntity().remove(classEntity);
 		userRepository.save(user);
@@ -175,14 +194,14 @@ public class ClassServiceImpl implements ClassService {
 
 	@Override
 	public ResponseEntity<?> addusertoclass(Long classid, UserResponse userdto, MultipartFile file) {
-		ClassEntity classEntity = classRepository.findById(classid).get();
+		ClassEntity classEntity = classEntityRepository.findById(classid).get();
 		
 		User user = userRepository.findByUserCode(userdto.getUserCode());
 		if(user != null) {
 			return ResponseEntity.noContent().build();
 		}else {
 			String imageName = file.getOriginalFilename();
-				userdto.setImage(imageName);
+				userdto.setImageUrl(imageName);
 				Path imagePath = Paths.get(IMAGE_DIRECTORY +imageName);
 					try {
 						if(imagePath == null) {
@@ -209,7 +228,7 @@ public class ClassServiceImpl implements ClassService {
 
 	@Override
 	public List<UserResponse> getStudentsnopage(Long classid) {
-		Optional<ClassEntity> classEntity = classRepository.findById(classid);
+		Optional<ClassEntity> classEntity = classEntityRepository.findById(classid);
 //		if(classEntity.isPresent()) {
 //			Set<User> users= classEntity.get().getUsers();
 //			return users.stream().map(user -> {
@@ -221,12 +240,7 @@ public class ClassServiceImpl implements ClassService {
 		return null;
 	}
 
-	
-	
 
 
 
-	
-
-	
 }

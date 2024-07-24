@@ -7,9 +7,11 @@
     color: var(--white-color);
     h2 {
         font-size: 4rem;
-        font-style: italic;
-        text-shadow: 4px 4px #11101d;
-        font-weight: 700;
+        font-weight: 900;
+        background: linear-gradient(180deg, #c6fbfb, #f04fd0);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 }
 
@@ -19,7 +21,7 @@
     align-items: center;
     margin-left: 60px;
     img {
-        width: 60px;
+        width: 65px;
         border-radius: 50%;
     }
 }
@@ -31,8 +33,8 @@
     cursor: pointer;
 
     img {
-        width: 30px;
-        border-radius: 50%;
+        width: 40px;
+        border-radius: 100%;
     }
 
     h4 {
@@ -41,17 +43,4 @@
         font-size: 1.5rem;
         padding-left: 8px;
     }
-}
-
-.r {
-    display: flex;
-}
-
-.logout {
-    padding: 0 15px;
-    margin-right: 20px;
-    background-color: transparent;
-    font-size: 1.6rem;
-    cursor: pointer;
-    color: var(--white-color);
 }

@@ -34,15 +34,16 @@ import com.LuanVanTotNghiep.repository.UserRepository;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserRepository userRepository;
+	UserRepository userRepository;
 
     @Autowired
-    private RoleRepository roleRepository;
-
-    PasswordEncoder passwordEncode = new BCryptPasswordEncoder(10);
+	RoleRepository roleRepository;
 
 	@Autowired
-	private UserMapper userMapper;
+    PasswordEncoder passwordEncode;
+
+	@Autowired
+	UserMapper userMapper;
 
     private final String IMAGE_DIRECTORY = "src/main/resources/static/assets/img/";
 
@@ -52,7 +53,7 @@ public class UserServiceImpl implements UserService {
 		Role teacherRole = roleRepository.findByName("TEACHER");
 	    List<User> teachers = userRepository.findByRolesContaining(teacherRole);
 	    return teachers.stream()
-	            .map(teacher -> userMapper.UserToUserResponse(teacher))
+	            .map(teacher -> userMapper.toUserResponse(teacher))
 	            .collect(Collectors.toList());
 	}
 	@Override
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserService {
 		Role teacherRole = roleRepository.findByName("TEACHER");
 		Page<User> teachers = userRepository.findTeachersByRoleAndKeyWord(teacherRole.getId(),keyword, pageable);
 		List<UserResponse> teachersDTO = teachers.stream()
-				.map(teacher -> userMapper.UserToUserResponse(teacher))
+				.map(teacher -> userMapper.toUserResponse(teacher))
 				.collect(Collectors.toList());
 		return new PageImpl<>(teachersDTO, pageable,teachers.getTotalElements());
 	}
@@ -94,7 +95,7 @@ public class UserServiceImpl implements UserService {
 			user.setSex(userdto.getSex());
 			user.setEmail(userdto.getEmail());
 			user.setPassword(passwordEncode.encode(userdto.getPassword()));
-			user.setImage((image!=null ? image.getOriginalFilename() : null));
+			user.setImageUrl((image!=null ? image.getOriginalFilename() : null));
 			user.setRoles(roleteacher);
 		}
 		userRepository.save(user);
@@ -121,7 +122,7 @@ public class UserServiceImpl implements UserService {
 			user.get().setSex(userdto.getSex());
 			user.get().setEmail(userdto.getEmail());
 			user.get().setPassword(passwordEncode.encode(userdto.getPassword()));
-			user.get().setImage(image != null ? image.getOriginalFilename() : user.get().getImage());
+			user.get().setImageUrl(image != null ? image.getOriginalFilename() : user.get().getImageUrl());
 			userRepository.save(user.get());
 		}
 		return ResponseEntity.ok().build();
@@ -147,9 +148,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ResponseEntity<ByteArrayResource> getImageMainUrlFromUser(Long userid) {
 		Optional<User> user = userRepository.findById(userid);
-		if(user.get().getImage() != null) {
+		if(user.get().getImageUrl() != null) {
 			try {
-				Path filename = Paths.get(IMAGE_DIRECTORY,user.get().getImage());
+				Path filename = Paths.get(IMAGE_DIRECTORY,user.get().getImageUrl());
 				byte[] buffer = Files.readAllBytes(filename);
 				ByteArrayResource byteArrayResource = new ByteArrayResource(buffer);
 				return ResponseEntity.ok()
@@ -170,7 +171,7 @@ public class UserServiceImpl implements UserService {
 		if(user.isPresent()) {
 			if(image != null) {
 				String fileName = image.getOriginalFilename();
-				userdto.setImage(fileName);
+				userdto.setImageUrl(fileName);
 				Path imagePath = Paths.get(IMAGE_DIRECTORY + fileName);
 				try {
 					if(imagePath == null) {
@@ -185,7 +186,7 @@ public class UserServiceImpl implements UserService {
 			user.get().setSex(userdto.getSex());
 			user.get().setBirthday(userdto.getBirthday());
 			user.get().setPhoneNumber(userdto.getPhoneNumber());
-			user.get().setImage(userdto.getImage());
+			user.get().setImageUrl(userdto.getImageUrl());
 			user.get().setPassword(passwordEncode.encode(userdto.getPassword()));
 			user.get().setEmail(userdto.getEmail());
 			userRepository.save(user.get());

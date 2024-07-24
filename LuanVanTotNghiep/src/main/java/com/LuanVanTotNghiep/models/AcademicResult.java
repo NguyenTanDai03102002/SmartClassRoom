@@ -1,10 +1,7 @@
 package com.LuanVanTotNghiep.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,6 +10,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(exclude = {"scores","conduct","student","semester","schoolYear"})
+@ToString(exclude = {"scores","conduct","student","semester","schoolYear"})
 @Entity
 public class AcademicResult {
     @Id

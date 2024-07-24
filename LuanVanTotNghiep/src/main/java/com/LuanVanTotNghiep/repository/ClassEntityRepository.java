@@ -9,8 +9,10 @@ import com.LuanVanTotNghiep.models.ClassEntity;
 import com.LuanVanTotNghiep.models.SchoolYear;
 
 
-public interface ClassRepository extends JpaRepository<ClassEntity,Long> {
+public interface ClassEntityRepository extends JpaRepository<ClassEntity,Long> {
+
 	List<ClassEntity> findBySchoolYear(SchoolYear schoolYear);
+
 	List<ClassEntity> findBySchoolYearAndGrade(SchoolYear schoolYear, Grade grade);
 
 }

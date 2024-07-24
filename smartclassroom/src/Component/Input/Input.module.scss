@@ -1,12 +1,14 @@
 .formInput {
     position: relative;
     input {
+        padding: 10px;
+        margin-bottom: 30px;
+        display: block;
         width: 100%;
-        border: 1px solid rgba(0, 0, 0, 0.3);
-        border-radius: 4px;
-        padding: 6px 6px;
+        border: 1px solid #ccc;
+        background-color: #ebe8e8cc;
+        border-radius: 5px;
         font-size: 1.8rem;
-        margin-bottom: 8px;
 
         &::placeholder {
             font-size: 1.5rem;
@@ -29,6 +31,7 @@
         color: red;
         display: none;
         top: 100%;
+        margin-top: 4px;
     }
     .success {
         position: absolute;

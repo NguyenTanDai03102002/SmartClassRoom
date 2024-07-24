@@ -1,18 +1,26 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { pageRoutes } from './routes';
-import Headeronly from './Admin/component/layout/headeronly/Headeronly';
 import { Fragment } from 'react';
+import { ToastContainer } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import { authUser } from './redux/selectors';
+import Headeronly from './Admin/component/layout/headeronly/Headeronly';
 import DefaultLayout from './Admin/component/layout/defaultlayout/DefaultLayout';
 import HearderAndFooter from './User/Layout/HeaderAndFooter/Index';
 import Gototop from './Component/GoToTop/Index';
 // import HostLine from './Component/HostLine/Index';
 // import Chat from './Component/Chat/Index';
-import { ToastContainer } from 'react-toastify';
-import { useSelector } from 'react-redux';
-import { authUser } from './redux/selectors';
 
 function App() {
-    const user = useSelector(authUser);
+    const RequireAuth = ({ children, requireAuth }) => {
+        const user = useSelector(authUser);
+        const location = useLocation();
+        if (requireAuth && !user) {
+            return <Navigate to="/login" state={{ from: location.pathname }} />;
+        }
+        return children;
+    };
+
     return (
         <>
             <Router>
@@ -37,15 +45,9 @@ function App() {
                                     path={item.path}
                                     element={
                                         <Layout>
-                                            {item.requireAuth && !user ? (
-                                                <Navigate to="/login" />
-                                            ) : item.path.startsWith('/admin') &&
-                                              !user.roles.includes('ADMIN') &&
-                                              !user.roles.includes('TEACHER') ? (
-                                                <Navigate to="/" />
-                                            ) : (
+                                            <RequireAuth requireAuth={item.requireAuth}>
                                                 <item.Component />
-                                            )}
+                                            </RequireAuth>
                                         </Layout>
                                     }
                                 />
@@ -58,7 +60,7 @@ function App() {
                 <>
                     <Chat />
                     <HostLine />
-                </>
+                </> 
             )} */}
             <Gototop />
 

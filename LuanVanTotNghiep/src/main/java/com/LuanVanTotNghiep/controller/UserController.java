@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,20 +36,35 @@ public class UserController {
   
 	@Autowired
 	private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserMapper userMapper;
    
     @GetMapping("/getImage/{userid}")
     public ResponseEntity<ByteArrayResource> getImage(@PathVariable Long userid) throws IOException{
     	return userService.getImageMainUrlFromUser(userid);
     		
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/user")
+    public List<UserResponse> getAllUser() {
+        List<User> userList = userRepository.findAll();
+        return userList.stream().map(user -> userMapper.toUserResponse(user))
+                .collect(Collectors.toList());
+    }
+
 	
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/teacher")
     public List<UserResponse> getAllTeacher() {
     	return userService.getAllTeacher();
     }
     
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/teacher-page")
     public Page<UserResponse> getAllTeacherPageable(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "8") int size,
                                                     @RequestParam(required =false) String keyword) {
@@ -56,30 +72,30 @@ public class UserController {
     }
    
     
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/import-excel-teacher")
     public ResponseEntity<?> importexcelTeacher(@RequestBody List<UserResponse> teachersDTO){
     	return userService.importexcelTeacher(teachersDTO);
     }
     
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add-teacher")
     public ResponseEntity<?> addteacher(@RequestPart("UserDTO") UserResponse userdto, @RequestPart(value="image",required =false) MultipartFile image){
     	return userService.addteacher(userdto,image);
     }
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/edit-teacher/{userId}")
     public ResponseEntity<?> editteacher(@PathVariable Long userId, @RequestPart("UserDTO") UserResponse userdto, @RequestPart(value="image",required =false) MultipartFile image){
     	return userService.editTeacher(userId,userdto,image);
     }
     
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete-teacher/{userId}")
     public ResponseEntity<?> deleteteacher(@PathVariable Long userId){
     	return userService.deleteTeacher(userId);
     }
     
-//	@PreAuthorize("hasAuthority('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/edit-student-in-class/{userid}")
 	public ResponseEntity<?> editStudentInCLass(@PathVariable Long userid, @RequestPart("userDTO") UserResponse userdto, @RequestPart(value = "image", required = false) MultipartFile image){
 		return userService.EditStudentInClass(userid,userdto,image);

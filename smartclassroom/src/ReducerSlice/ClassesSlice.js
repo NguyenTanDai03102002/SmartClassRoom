@@ -5,7 +5,6 @@ const classesSlice = createSlice({
     initialState: {
         classes: [],
         classLoading: false,
-        selectedforblock: null,
         classError: null,
     },
     reducers: {
@@ -15,6 +14,7 @@ const classesSlice = createSlice({
         FETCH_ALL_CLASSES_SUCCESS: (state, action) => {
             state.classes = action.payload;
             state.classLoading = false;
+            state.classError = null;
         },
         FETCH_ALL_CLASSES_FAILURE: (state, action) => {
             state.classes = [];
@@ -23,9 +23,6 @@ const classesSlice = createSlice({
         },
         ADD_ALL_TEACHER_TO_CLASSES: (state, action) => {
             state.classes = action.payload;
-        },
-        SELECTED_FOR_BLOCK: (state, action) => {
-            state.selectedforblock = action.payload;
         },
     },
 });

@@ -19,7 +19,7 @@ public class UserResponse {
 	 LocalDate birthday;
 	 String phoneNumber;
 	 int sex;
-	 String image;
+	 String imageUrl;
 	 String email;
 	 String password;
 	 String job;

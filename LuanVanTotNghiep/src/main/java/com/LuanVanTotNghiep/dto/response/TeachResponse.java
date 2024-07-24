@@ -22,7 +22,7 @@ public class TeachResponse {
 	
 	 ClassEntityResponse classEntity;
 	
-	 YearResponse year;
+	 SchoolYearResponse year;
 	
 	 DayOfWeek dayOfWeek;
 

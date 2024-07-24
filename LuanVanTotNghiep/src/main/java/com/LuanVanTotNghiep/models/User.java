@@ -5,15 +5,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(exclude = {"roles","classEntity","subjects","teaches","academicResults","attendances","address"})
+@ToString(exclude = {"roles","classEntity","subjects","teaches","academicResults","attendances","address"})
 @Entity
 public class User {
 	
@@ -26,7 +25,7 @@ public class User {
 	private LocalDate birthday;
 	private String phoneNumber;
 	private int sex;
-	private String image;
+	private String imageUrl;
 	private String email;
 	private String password;
 	private String job;
@@ -34,7 +33,7 @@ public class User {
 	private String nationality;
 	
 	
-	@ManyToMany(fetch = FetchType.EAGER ,cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
 	@JoinTable(name ="users_roles" ,
 			joinColumns = @JoinColumn(name = "user_id") , 
 			inverseJoinColumns = @JoinColumn(name = "role_id"))

@@ -7,6 +7,7 @@ import studentSlice from '../ReducerSlice/studentSlice';
 import excelSlice from '../ReducerSlice/excelSilce';
 import subjectSilce from '../ReducerSlice/subjectSlice';
 import teachSlice from '../ReducerSlice/teachSlice';
+import schoolSlice from '../ReducerSlice/schoolYear';
 
 const store = configureStore({
     reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
         excel: excelSlice.reducer,
         subject: subjectSilce.reducer,
         teach: teachSlice.reducer,
+        schoolYear: schoolSlice.reducer,
     },
 });
 

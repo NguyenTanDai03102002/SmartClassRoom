@@ -1,10 +1,10 @@
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import { showErrorMessage, showSuccessMessage, showWarningMessage } from '../Component/Notification/Index';
 import { useNavigate } from 'react-router-dom';
 import {
     getAllBlock,
     getAllClassesByYearAndBlock,
-    getImage,
     importStudentsFromExcel,
     putAllTeachersToClasses,
     userLogin,
@@ -21,6 +21,8 @@ import {
     GetAllSubject,
     XepGiangDay,
     GetGiangDayByTeacherId,
+    getAllSchoolYear,
+    getAllClassesByYear,
 } from './axios';
 import authSlice from '../ReducerSlice/authSlice';
 import blockSlice from '../ReducerSlice/blockSlice';
@@ -30,6 +32,7 @@ import studentSlice from '../ReducerSlice/studentSlice';
 import excelSlice from '../ReducerSlice/excelSilce';
 import subjectSilce from '../ReducerSlice/subjectSlice';
 import teachSlice from '../ReducerSlice/teachSlice';
+import schoolSlice from '../ReducerSlice/schoolYear';
 
 export const useHandleDispatch = () => {
     const dispatch = useDispatch();
@@ -37,44 +40,70 @@ export const useHandleDispatch = () => {
 
     const logoutUser = () => {
         dispatch(authSlice.actions.LOGOUT_SUCCESS());
-        toast.success('Logout thành công');
+        showSuccessMessage('Logout thành công');
         navigate('/login');
     };
-    const loginUser = (datalogin, setDatalogin, usernameInputRef) => {
-        dispatch(authSlice.actions.LOGIN_REQUEST());
-
-        setTimeout(() => {
-            userLogin(datalogin)
-                .then((response) => {
-                    dispatch(authSlice.actions.LOGIN_SUCCESS(response.data));
-                    const role = response.data.user.roles;
-                    if (role.includes('ADMIN')) {
-                        navigate('/admin');
-                    } else if (role.includes('TEACHER')) {
-                        navigate('/admin');
-                    } else if (role.includes('USER')) {
-                        navigate(-1);
+    const loginUser = async (datalogin, setDatalogin, usernameInputRef, prevPathname) => {
+        try {
+            dispatch(authSlice.actions.LOGIN_REQUEST());
+            const response = await userLogin(datalogin);
+            if (response.data.code === 1000) {
+                dispatch(authSlice.actions.LOGIN_SUCCESS(response.data.result));
+                const roleNames = response.data.result.user.roles.map((r) => r.name);
+                if (prevPathname.startsWith('/admin')) {
+                    if (roleNames.includes('ADMIN') || roleNames.includes('TEACHER')) {
+                        navigate(prevPathname);
+                    } else {
+                        showWarningMessage('bạn không có quyền truy cập');
+                        navigate('/');
                     }
-                    toast.success('Đăng nhập thành công');
-                })
-                .catch((error) => {
-                    dispatch(authSlice.actions.LOGIN_FAILURE(error.message));
-                    toast.error('Đăng nhập thất bại');
-                    setDatalogin({
-                        maSo: '',
-                        password: '',
-                    });
-                    usernameInputRef.current.focus();
-                });
-        }, 2000);
+                } else {
+                    if (roleNames.includes('ADMIN') || roleNames.includes('TEACHER')) {
+                        navigate('/admin');
+                    } else {
+                        navigate(prevPathname);
+                    }
+                }
+            }
+        } catch (error) {
+            if (error.response.data.code === 1002) {
+                dispatch(authSlice.actions.LOGIN_FAILURE(error.response.data.message));
+                showErrorMessage(`${error.response.data.message}<br>Lý do: Mã số hoặc Password không đúng`).then(
+                    (result) => {
+                        if (result.isConfirmed) {
+                            setDatalogin({
+                                userCode: '',
+                                password: '',
+                            });
+                            usernameInputRef.current.focus();
+                        }
+                    },
+                );
+            }
+        }
     };
 
-    const getImageOfUser = async (user) => {
+    const getallschoolyear = async () => {
         try {
-            const response = await getImage(user.id);
-            return response;
+            dispatch(schoolSlice.actions.FETCH_ALL_SchoolYears_REQUEST());
+            const response = await getAllSchoolYear();
+            if (response.data.code === 1000) {
+                dispatch(schoolSlice.actions.FETCH_ALL_SchoolYears_SUCCESS(response.data.result));
+            }
         } catch (error) {
-            return null;
+            dispatch(schoolSlice.actions.FETCH_ALL_SchoolYears_FAILURE(error.response.data.message));
+        }
+    };
+
+    const getallclassesbyyear = async (id) => {
+        try {
+            dispatch(classesSlice.actions.FETCH_ALL_CLASSES_REQUEST());
+            const response = await getAllClassesByYear(id);
+            if (response.data.code === 1000) {
+                dispatch(classesSlice.actions.FETCH_ALL_CLASSES_SUCCESS(response.data.result));
+            }
+        } catch (error) {
+            dispatch(classesSlice.actions.FETCH_ALL_CLASSES_FAILURE(error.response.data.message));
         }
     };
 
@@ -281,6 +310,8 @@ export const useHandleDispatch = () => {
     return {
         logoutUser,
         loginUser,
+        getallschoolyear,
+        getallclassesbyyear,
         fecthBlock,
         fecthClasses,
         fetchTeachers,
@@ -290,7 +321,6 @@ export const useHandleDispatch = () => {
         addteachertosv,
         editTeacher,
         deleteTeacher,
-        getImageOfUser,
         putStudentsFromExcel,
         getallstudentsofclass,
         deleteUserfromClass,

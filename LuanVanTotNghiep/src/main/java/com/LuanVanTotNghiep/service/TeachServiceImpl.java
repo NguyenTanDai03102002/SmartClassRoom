@@ -12,17 +12,17 @@ import com.LuanVanTotNghiep.dto.response.TeachResponse;
 import com.LuanVanTotNghiep.dto.request.TeachRequest;
 import com.LuanVanTotNghiep.models.Teach;
 import com.LuanVanTotNghiep.models.User;
-import com.LuanVanTotNghiep.repository.ClassRepository;
+import com.LuanVanTotNghiep.repository.ClassEntityRepository;
 import com.LuanVanTotNghiep.repository.SubjectRepository;
 import com.LuanVanTotNghiep.repository.TeachRepository;
 import com.LuanVanTotNghiep.repository.UserRepository;
-import com.LuanVanTotNghiep.repository.YearRepository;
+import com.LuanVanTotNghiep.repository.SchoolYearRepository;
 
 @Service
 public class TeachServiceImpl implements TeachService {
 	
 	@Autowired
-	private ClassRepository classRepository;
+	private ClassEntityRepository classEntityRepository;
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -31,7 +31,7 @@ public class TeachServiceImpl implements TeachService {
 	private SubjectRepository subjectRepository;
 	
 	@Autowired
-	private YearRepository yearRepository;
+	private SchoolYearRepository schoolYearRepository;
 	
 	@Autowired
 	private TeachRepository teachRepository;
@@ -41,12 +41,12 @@ public class TeachServiceImpl implements TeachService {
 		try {
 			for (TeachRequest teachRequest : teachsRequestDTO) {
 				Teach teach = new Teach();
-				teach.setClassEntity(classRepository.findById(teachRequest.getClassEntityId()).orElseThrow());
+				teach.setClassEntity(classEntityRepository.findById(teachRequest.getClassEntityId()).orElseThrow());
 				teach.setUser(userRepository.findById(teachRequest.getTeacherId()).orElseThrow());
 				teach.setSubject(subjectRepository.findById(teachRequest.getSubjectId()).orElseThrow());
 				teach.setDayOfWeek(teachRequest.getDayOfWeek());
 //				teach.setTiet(teachRequest.getTiet());
-				teach.setSchoolYear(yearRepository.findBySchoolYear(teachRequest.getYear()));
+				teach.setSchoolYear(schoolYearRepository.findBySchoolYear(teachRequest.getYear()));
 			
 				teachRepository.save(teach);
 			}
