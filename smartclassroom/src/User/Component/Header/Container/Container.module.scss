@@ -11,13 +11,15 @@
     height: 80px;
     z-index: 100;
     background-color: var(--white-color);
+    overflow: hidden;
 
     .logo {
         background-color: transparent;
         text-align: center;
         width: 15%;
+        overflow: hidden;
         img {
-            width: 70px;
+            width: 50%;
             border-radius: 50%;
         }
     }

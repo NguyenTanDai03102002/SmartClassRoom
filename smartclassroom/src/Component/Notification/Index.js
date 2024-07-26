@@ -41,3 +41,30 @@ export const showWarningMessage = (message) =>
             icon: styles.icon,
         },
     });
+
+export const showBeforeDelete = (message) => {
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger',
+        },
+        buttonsStyling: false,
+    });
+
+    return swalWithBootstrapButtons.fire({
+        title: 'Bạn chắc chứ?',
+        text: message,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Vâng, chắc chắn là như vậy rồi!',
+        cancelButtonText: 'Thôi, tôi sai rồi!',
+        reverseButtons: true,
+        customClass: {
+            popup: styles.popup,
+            title: styles.title,
+            icon: styles.icon,
+            confirmButton: styles['swal2-confirm'],
+            cancelButton: styles['swal2-cancel'],
+        },
+    });
+};

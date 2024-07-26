@@ -6,6 +6,7 @@ import CongKhai from './btnCongKhai/Index';
 import TuyenSinh from './btnTuyenSinh/Index';
 import Tuvan from './btnTuVan/Index';
 import { NavLink, useLocation } from 'react-router-dom';
+import ImageSchool from '../../../../Component/Image/School.png';
 
 const cx = classNames.bind(Styles);
 
@@ -29,7 +30,7 @@ function Index() {
     return (
         <div className={cx('header-control', { visible: isNavbarVisible })}>
             <Button className={cx('logo')} to="/">
-                <img src="https://tse3.mm.bing.net/th?id=OIP.7y34p7gUXDojc6MZz5AwfwHaHJ&pid=Api&P=0&h=180" alt="anh" />
+                <img src={ImageSchool} alt="ImageSchool" />
             </Button>
             <div className={cx('link')}>
                 <NavLink className={cx('btn-link', { active: location.pathname === '/' })} to="/">

@@ -6,7 +6,6 @@ import { showWarningMessage } from '../Notification/Index';
 import classNames from 'classnames/bind';
 import Styles from './login.module.scss';
 import Loading from '../Loading/Index';
-import ImageLogin from '../Image/LoginImage.png';
 import GoogleIcon from '../Image/googleIcon.png';
 import Button from '../button/Button';
 import Input from '../Input/Index';
@@ -91,7 +90,10 @@ function Login2() {
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
                 <div className={cx('left')}>
-                    <img src={ImageLogin} alt="imageLogin" />
+                    <img
+                        src="https://res.cloudinary.com/danrswhe6/image/upload/v1721959674/LoginImage_ffev5i.png"
+                        alt="imageLogin"
+                    />
                     <h1>TRƯỜNG HỌC - NƠI ƯƠM MẦM TRI THỨC, XÂY DỰNG TƯƠNG LAI</h1>
                 </div>
                 <div className={cx('right')}>
