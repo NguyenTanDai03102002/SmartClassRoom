@@ -6,7 +6,7 @@ export const userToken = (state) => state.auth.token;
 
 export const schoolYears = (state) => state.schoolYear.SchoolYears;
 
-export const Blocks = (state) => state.block.blocks;
+export const Grades = (state) => state.grade.grades;
 
 export const Classes = (state) => state.class.classes;
 

@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 import com.LuanVanTotNghiep.Exception.AppException;
 import com.LuanVanTotNghiep.Exception.ErrorCode;
 import com.LuanVanTotNghiep.Mapper.ClassEntityMapper;
+import com.LuanVanTotNghiep.dto.request.ArrayIdRequest;
+import com.LuanVanTotNghiep.dto.request.ClassEntityRequest;
 import com.LuanVanTotNghiep.dto.response.ApiResponse;
 import com.LuanVanTotNghiep.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,8 +64,8 @@ public class ClassEntityServiceImpl implements ClassEntityService {
     private final String IMAGE_DIRECTORY = "src/main/resources/static/assets/img/";
 
 	@Override
-	public ApiResponse<List<ClassEntityResponse>> getAllByYear(Long yearId) {
-		SchoolYear schoolYear = schoolYearRepository.findById(yearId).orElseThrow(() -> new AppException(ErrorCode.YEAR_NOT_EXISTED));
+	public ApiResponse<List<ClassEntityResponse>> getAllBySchoolYear(Long schoolYearId) {
+		SchoolYear schoolYear = schoolYearRepository.findById(schoolYearId).orElseThrow(() -> new AppException(ErrorCode.YEAR_NOT_EXISTED));
 		List<ClassEntity> classEntityList = classEntityRepository.findBySchoolYear(schoolYear);
 		List<ClassEntityResponse> classEntityResponseList = classEntityList.stream()
 				.map(classEntity -> classEntityMapper.toClassEntityResponse(classEntity))
@@ -72,7 +74,34 @@ public class ClassEntityServiceImpl implements ClassEntityService {
 				.result(classEntityResponseList)
 				.build();
 	}
-    
+
+	@Override
+	public ApiResponse<ClassEntityResponse> createClass(Long schoolYearId, Long gradeId, ClassEntityRequest request) {
+		SchoolYear schoolYear = schoolYearRepository.findById(schoolYearId)
+				.orElseThrow(() -> new AppException(ErrorCode.YEAR_NOT_EXISTED));
+		Grade grade = gradeRepository.findById(gradeId)
+				.orElseThrow(() -> new AppException(ErrorCode.GRADE_NOT_EXISTED));
+		return ApiResponse.<ClassEntityResponse>builder()
+				.result(classEntityMapper.toClassEntityResponse(
+						classEntityRepository.save(ClassEntity.builder()
+						.name(request.getName())
+						.schoolYear(schoolYear)
+						.grade(grade)
+						.build())))
+				.build();
+	}
+
+	@Override
+	public void deleteClass(ArrayIdRequest request) {
+		request.getArrId().forEach(id -> {
+			ClassEntity classEntity = classEntityRepository.findById(id)
+					.orElseThrow(() -> new AppException(ErrorCode.CLASS_NOT_EXISTED));
+			if(!classEntity.getStudents().isEmpty())
+				throw new AppException(ErrorCode.STUDENT_EXISTED);
+			classEntityRepository.delete(classEntity);
+		});
+    }
+
 	@Override
 	public List<ClassEntityResponse> getClassesByYearAndBlock(Integer year, Long khoid) {
 		int y = (year != null) ? year : LocalDate.now().getYear();

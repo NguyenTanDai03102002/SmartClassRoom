@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 import Styles from './Khoi.module.scss';
 import Button from '../../../Component/button/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { Blocks } from '../../../redux/selectors';
+import { Grades } from '../../../redux/selectors';
 import { useHandleDispatch } from '../../../services/useHandleDispatch';
 import classesSlice from '../../../ReducerSlice/classesSlice';
 
@@ -12,7 +12,7 @@ const cx = classNames.bind(Styles);
 function Index() {
     const dispatch = useDispatch();
     const { fecthBlock, fecthClasses } = useHandleDispatch();
-    const blocks = useSelector(Blocks);
+    const grades = useSelector(Grades);
     useEffect(() => {
         fecthBlock();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -25,7 +25,7 @@ function Index() {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('items')}>
-                {blocks.map((item) => (
+                {grades.map((item) => (
                     <Button
                         key={item.id}
                         className={cx('item')}

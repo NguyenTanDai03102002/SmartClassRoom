@@ -2,20 +2,44 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:8070/';
 
+//AuthenticationController
 export const userLogin = (dataLogin) => {
     return axios.post(API_BASE_URL + 'auth/login', dataLogin);
 };
 
+//SchoolYearControler
 export const getAllSchoolYear = () => {
     return axios.get(API_BASE_URL + 'schoolYear/getAll');
 };
 
+//ClassEntityController
 export const getAllClassesByYear = (yearId) => {
-    return axios.get(API_BASE_URL + 'classEntity/getAllByYear?yearId=' + yearId);
+    return axios.get(API_BASE_URL + 'classEntity/getAllBySchoolYear?schoolYearId=' + yearId);
 };
 
-export const getAllBlock = () => {
-    return axios.get(API_BASE_URL + 'block');
+export const createClass = (token, dataAdd) => {
+    return axios.post(
+        API_BASE_URL + `classEntity/createClass?schoolYearId=${dataAdd.schoolYearId}&gradeId=${dataAdd.gradeId}`,
+        { name: dataAdd.name },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    );
+};
+export const deleteClass = (token, dataDel) => {
+    return axios.delete(API_BASE_URL + 'classEntity/deleteClass', {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+        data: { arrId: dataDel },
+    });
+};
+
+//GradeController
+export const getAllGrade = () => {
+    return axios.get(API_BASE_URL + 'grade/getAll');
 };
 
 export const getAllClassesByYearAndBlock = (year, blockid) => {

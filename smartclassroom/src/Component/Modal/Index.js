@@ -5,11 +5,45 @@ import Button from '../button/Button';
 
 const cx = classNames.bind(styles);
 
-function Index({ title, children, form1000 = false, save = false, edit = false, onClose }) {
+function Index({
+    title,
+    children,
+    save = false,
+    edit = false,
+    onClose,
+    h300 = false,
+    h400 = false,
+    h500 = false,
+    h600 = false,
+    h700 = false,
+    h800 = false,
+    w300 = false,
+    w400 = false,
+    w500 = false,
+    w600 = false,
+    w700 = false,
+    w800 = false,
+    handleSubmitAdd,
+}) {
+    const classNameModalContent = {
+        h300,
+        h400,
+        h500,
+        h600,
+        h700,
+        h800,
+        w300,
+        w400,
+        w500,
+        w600,
+        w700,
+        w800,
+    };
+
     return (
         <div className={cx('Modal')}>
             <div className={cx('overlay')}></div>
-            <div className={cx('modal-content', { form1000 })}>
+            <div className={cx('modal-content', classNameModalContent)}>
                 <div className={cx('title')}>{title}</div>
                 <div className={cx('content')}>
                     {React.Children.map(children, (child, index) => (
@@ -19,7 +53,13 @@ function Index({ title, children, form1000 = false, save = false, edit = false, 
                     ))}
                 </div>
                 <div className={cx('button')}>
-                    {save ? <Button btn>Thêm</Button> : edit && <Button btn>Lưu</Button>}
+                    {save ? (
+                        <Button btn onClick={handleSubmitAdd}>
+                            Thêm
+                        </Button>
+                    ) : (
+                        edit && <Button btn>Lưu</Button>
+                    )}
                     <Button btn onClick={onClose}>
                         Thoát
                     </Button>

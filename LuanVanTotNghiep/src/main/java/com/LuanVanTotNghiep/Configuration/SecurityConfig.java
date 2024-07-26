@@ -19,15 +19,20 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final String[] PUBLIC_ENDPOINTS ={
-    //AuthenticationController
+    private final String[] PUBLIC_ENDPOINTS = {
+            //AuthenticationController
             "/auth/login",
 
-    //ClassEntityController
-            "/classEntity/getAllByYear",
+            //ClassEntityController
+            "/classEntity/getAllBySchoolYear",
 
-    //SchoolYearController
-            "/schoolYear/getAll"
+            //SchoolYearController
+            "/schoolYear/getAll",
+
+            //GradeController
+            "/grade/getAll",
+
+
     };
 
     @Value("${jwt.key}")

@@ -15,6 +15,7 @@ const cx = classNames.bind(Styles);
 function Index({
     title,
     headCells,
+    data,
     handleRequestSort,
     order,
     orderBy,
@@ -24,6 +25,7 @@ function Index({
     rowCount,
     deleteRecord,
     selected,
+    setSelected,
 }) {
     return (
         <TableHead className={cx('TableHead')}>
@@ -32,7 +34,16 @@ function Index({
                     <div className={cx('titleContainer')}>
                         {selected.length <= 0 ? <span>{title}</span> : `${selected.length} được chọn `}
                         {selected.length > 0 && (
-                            <span onClick={() => deleteRecord(selected)}>
+                            <span
+                                onClick={async () => {
+                                    try {
+                                        await deleteRecord(selected);
+                                        setSelected([]);
+                                    } catch (error) {
+                                        console.error('Error during delete operation:', error);
+                                    }
+                                }}
+                            >
                                 <DeleteIcon className={cx('icon')} />
                             </span>
                         )}

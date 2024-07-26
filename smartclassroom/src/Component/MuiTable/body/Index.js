@@ -10,7 +10,10 @@ import Checkbox from '@mui/material/Checkbox';
 
 const cx = classNames.bind(Styles);
 
-function Index({ visibleRows, data, editRecord, selected, handleClick }) {
+function Index({ visibleRows, data, headCells, editRecord, selected, handleClick }) {
+    const getNestedValue = (obj, path) => {
+        return path.split('.').reduce((acc, key) => (acc && acc[key] ? acc[key] : null), obj);
+    };
     return (
         <TableBody className={cx('TableBody')}>
             {data.length === 0 ? (
@@ -44,11 +47,11 @@ function Index({ visibleRows, data, editRecord, selected, handleClick }) {
                                     }}
                                 />
                             </TableCell>
-                            <TableCell className={cx('datarow')}>{row.name}</TableCell>
-                            <TableCell className={cx('datarow')}>{row.grade.grade}</TableCell>
-                            <TableCell className={cx('datarow')}>
-                                {row.classTeacher || 'Chưa có giáo viên chủ nhiệm'}
-                            </TableCell>
+                            {headCells.map((cell) => (
+                                <TableCell key={cell.id} className={cx('datarow')}>
+                                    {getNestedValue(row, cell.id) || 'không có dữ liệu'}
+                                </TableCell>
+                            ))}
                             <TableCell className={cx('datarow')}>
                                 <div className={cx('actions')}>
                                     <div className={cx('edit')} onClick={(e) => editRecord(e, row)}>

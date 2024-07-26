@@ -1,7 +1,6 @@
 import React from 'react';
 import classNames from 'classnames/bind';
 import Styles from './introduce.module.scss';
-import ImageMainStudentPageHome from '../../../../Component/Image/imageStudentPageHome.png';
 import Img2 from '../../../Component/Assets/Img/b.png';
 import Img3 from '../../../Component/Assets/Img/c.png';
 import Img4 from '../../../Component/Assets/Img/d.png';
@@ -39,7 +38,10 @@ function Index() {
     ];
     return (
         <div className={cx('wrapper')}>
-            <img src={ImageMainStudentPageHome} alt="anh" />
+            <img
+                src="https://res.cloudinary.com/danrswhe6/image/upload/v1721960169/imageStudentPageHome_kbh77m.png"
+                alt="anh"
+            />
             <div className={cx('review')}>
                 <div className={cx('review-top')}>
                     <h3>VỀ CHÚNG TÔI</h3>

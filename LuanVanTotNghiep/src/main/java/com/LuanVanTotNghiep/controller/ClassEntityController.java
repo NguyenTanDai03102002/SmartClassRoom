@@ -3,12 +3,15 @@ package com.LuanVanTotNghiep.controller;
 
 import java.util.List;
 
+import com.LuanVanTotNghiep.dto.request.ArrayIdRequest;
+import com.LuanVanTotNghiep.dto.request.ClassEntityRequest;
 import com.LuanVanTotNghiep.dto.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,10 +37,26 @@ public class ClassEntityController {
 	@Autowired
 	private ClassEntityService classEntityService;
 
-	@GetMapping("/getAllByYear")
-	public ApiResponse<List<ClassEntityResponse>> getAllByYear(@RequestParam Long yearId) {
-		return classEntityService.getAllByYear(yearId);
+	@GetMapping("/getAllBySchoolYear")
+	public ApiResponse<List<ClassEntityResponse>> getAllByYear(@RequestParam Long schoolYearId) {
+		return classEntityService.getAllBySchoolYear(schoolYearId);
 	}
+
+	@PreAuthorize("hasRole('ADMIN')")
+	@PostMapping("/createClass")
+	public ApiResponse<ClassEntityResponse> CreateClass(@RequestParam Long schoolYearId,
+														@RequestParam Long gradeId,
+														@RequestBody ClassEntityRequest request){
+		return classEntityService.createClass(schoolYearId,gradeId,request);
+	}
+
+	@PreAuthorize("hasRole('ADMIN')")
+	@DeleteMapping("/deleteClass")
+	public void DeleteClass(@RequestBody ArrayIdRequest request){
+		System.out.println(request);
+		classEntityService.deleteClass(request);
+    }
+
 	
 	@GetMapping("/classes")
     public List<ClassEntityResponse> getClassesByYear(@RequestParam(required = false) Integer year, @RequestParam(required = false) Long khoiid) {

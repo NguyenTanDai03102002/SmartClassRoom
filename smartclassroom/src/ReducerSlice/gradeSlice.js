@@ -1,29 +1,30 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const blockSlice = createSlice({
-    name: 'block',
+const gradeSlice = createSlice({
+    name: 'grade',
     initialState: {
-        blocks: [],
-        blockLoading: false,
-        blockError: null,
+        grades: [],
+        Loading: false,
+        Error: null,
     },
 
     reducers: {
-        FETCH_ALL_BLOCKS_REQUEST: (state) => {
-            state.blockLoading = true;
+        FETCH_ALL_GRADES_REQUEST: (state) => {
+            state.Loading = true;
         },
-        FETCH_ALL_BLOCKS_SUCCESS: (state, action) => {
-            state.blockLoading = false;
-            state.blocks = action.payload;
+        FETCH_ALL_GRADES_SUCCESS: (state, action) => {
+            state.Loading = false;
+            state.grades = action.payload;
+            state.Error = null;
         },
-        FETCH_ALL_BLOCKS_FAILURE: (state, action) => {
-            state.blockLoading = false;
-            state.blockError = action.payload;
+        FETCH_ALL_GRADES_FAILURE: (state, action) => {
+            state.Loading = false;
+            state.Error = action.payload;
         },
     },
 });
 
-export default blockSlice;
+export default gradeSlice;
 
 // const initialState = {
 //     blocks: [],

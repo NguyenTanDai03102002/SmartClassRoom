@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authSlice from '../ReducerSlice/authSlice';
-import blockSlice from '../ReducerSlice/blockSlice';
+import gradeSlice from '../ReducerSlice/gradeSlice';
 import classesSlice from '../ReducerSlice/classesSlice';
 import teacherSlice from '../ReducerSlice/teacherSlice';
 import studentSlice from '../ReducerSlice/studentSlice';
@@ -12,7 +12,7 @@ import schoolSlice from '../ReducerSlice/schoolYear';
 const store = configureStore({
     reducer: {
         auth: authSlice.reducer,
-        block: blockSlice.reducer,
+        grade: gradeSlice.reducer,
         class: classesSlice.reducer,
         teacher: teacherSlice.reducer,
         student: studentSlice.reducer,

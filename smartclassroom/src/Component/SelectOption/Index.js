@@ -17,7 +17,7 @@ function Index({ title, dataOptions, onclick }) {
     const handleSearchChange = (event) => {
         setSearch(event.target.value);
     };
-    const filteredOptions = dataOptions.filter((option) =>
+    const filteredOptions = (dataOptions || []).filter((option) =>
         option.nameOption.toLowerCase().includes(search.toLowerCase()),
     );
     return (

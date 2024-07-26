@@ -107,9 +107,9 @@ function Index({ title, headCells, data, editRecord, deleteRecord, handleSearch 
     const visibleRows = useMemo(
         () =>
             stableSort(data, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [order, orderBy, page, rowsPerPage, data],
     );
-
     return (
         <div className={cx('table')}>
             <Paper sx={{ width: '100%' }}>
@@ -132,6 +132,7 @@ function Index({ title, headCells, data, editRecord, deleteRecord, handleSearch 
                         <Head
                             title={title}
                             headCells={headCells}
+                            data={data}
                             handleRequestSort={handleRequestSort}
                             order={order}
                             orderBy={orderBy}
@@ -141,9 +142,11 @@ function Index({ title, headCells, data, editRecord, deleteRecord, handleSearch 
                             rowCount={data.length}
                             deleteRecord={deleteRecord}
                             selected={selected}
+                            setSelected={setSelected}
                         />
                         <Body
                             data={data}
+                            headCells={headCells}
                             visibleRows={visibleRows}
                             editRecord={editRecord}
                             selected={selected}

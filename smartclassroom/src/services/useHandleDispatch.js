@@ -3,11 +3,21 @@ import { toast } from 'react-toastify';
 import { showErrorMessage, showSuccessMessage, showWarningMessage } from '../Component/Notification/Index';
 import { useNavigate } from 'react-router-dom';
 import {
-    getAllBlock,
+    //User
+    userLogin,
+
+    //Grade
+    getAllGrade,
+
+    //SchoolYear
+    getAllSchoolYear,
+
+    //CLassEntity
+    getAllClassesByYear,
+    createClass,
     getAllClassesByYearAndBlock,
     importStudentsFromExcel,
     putAllTeachersToClasses,
-    userLogin,
     getAllStudentsOfClass,
     deleteUserClass,
     addstudenttoclass,
@@ -21,11 +31,9 @@ import {
     GetAllSubject,
     XepGiangDay,
     GetGiangDayByTeacherId,
-    getAllSchoolYear,
-    getAllClassesByYear,
+    deleteClass,
 } from './axios';
 import authSlice from '../ReducerSlice/authSlice';
-import blockSlice from '../ReducerSlice/blockSlice';
 import classesSlice from '../ReducerSlice/classesSlice';
 import teacherSlice from '../ReducerSlice/teacherSlice';
 import studentSlice from '../ReducerSlice/studentSlice';
@@ -33,16 +41,20 @@ import excelSlice from '../ReducerSlice/excelSilce';
 import subjectSilce from '../ReducerSlice/subjectSlice';
 import teachSlice from '../ReducerSlice/teachSlice';
 import schoolSlice from '../ReducerSlice/schoolYear';
+import gradeSlice from '../ReducerSlice/gradeSlice';
 
 export const useHandleDispatch = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    //Authentication
 
     const logoutUser = () => {
         dispatch(authSlice.actions.LOGOUT_SUCCESS());
         showSuccessMessage('Logout thành công');
         navigate('/login');
     };
+
     const loginUser = async (datalogin, setDatalogin, usernameInputRef, prevPathname) => {
         try {
             dispatch(authSlice.actions.LOGIN_REQUEST());
@@ -82,7 +94,7 @@ export const useHandleDispatch = () => {
             }
         }
     };
-
+    //Schoolyear
     const getallschoolyear = async () => {
         try {
             dispatch(schoolSlice.actions.FETCH_ALL_SchoolYears_REQUEST());
@@ -95,6 +107,7 @@ export const useHandleDispatch = () => {
         }
     };
 
+    //ClassEntity
     const getallclassesbyyear = async (id) => {
         try {
             dispatch(classesSlice.actions.FETCH_ALL_CLASSES_REQUEST());
@@ -107,16 +120,32 @@ export const useHandleDispatch = () => {
         }
     };
 
-    const fecthBlock = () => {
-        dispatch(blockSlice.actions.FETCH_ALL_BLOCKS_REQUEST());
+    const createclass = async (token, dataAdd) => {
+        try {
+            const response = await createClass(token, dataAdd);
+            if (response.data.code === 1000) {
+                return true;
+            }
+        } catch (error) {}
+    };
 
-        getAllBlock()
-            .then((reponse) => {
-                dispatch(blockSlice.actions.FETCH_ALL_BLOCKS_SUCCESS(reponse.data));
-            })
-            .catch((error) => {
-                dispatch(blockSlice.actions.FETCH_ALL_BLOCKS_FAILURE(error.message));
-            });
+    const deleteclass = async (token, dataDel) => {
+        try {
+            await deleteClass(token, dataDel);
+        } catch (error) {}
+    };
+
+    //Grade
+    const getallgrade = async () => {
+        try {
+            dispatch(gradeSlice.actions.FETCH_ALL_GRADES_REQUEST());
+            const response = await getAllGrade();
+            if (response.data.code === 1000) {
+                dispatch(gradeSlice.actions.FETCH_ALL_GRADES_SUCCESS(response.data.result));
+            }
+        } catch (error) {
+            dispatch(gradeSlice.actions.FETCH_ALL_GRADES_FAILURE(error.message));
+        }
     };
 
     const fecthClasses = (year, blockid) => {
@@ -308,11 +337,21 @@ export const useHandleDispatch = () => {
     };
 
     return {
+        //User
         logoutUser,
         loginUser,
+
+        //SchoolYear
         getallschoolyear,
+
+        //ClassEntity
         getallclassesbyyear,
-        fecthBlock,
+        createclass,
+        deleteclass,
+
+        //Grade
+        getallgrade,
+
         fecthClasses,
         fetchTeachers,
         fetchTeachersPage,

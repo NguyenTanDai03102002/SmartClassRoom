@@ -61,8 +61,8 @@ public class DataInitializer implements CommandLineRunner {
         Grade grade11 = gradeRepository.save(Grade.builder().grade(11).build());
         Grade grade12 = gradeRepository.save(Grade.builder().grade(12).build());
 
-        schoolYearRepository.save(SchoolYear.builder().schoolYear(2023).build());
         SchoolYear schoolYear2 = schoolYearRepository.save(SchoolYear.builder().schoolYear(2024).build());
+        schoolYearRepository.save(SchoolYear.builder().schoolYear(2025).build());
 
         semesterRepository.save(Semester.builder().code("I").name("Học kỳ 1").startDay(5).startMonth(9).endDay(15).endMonth(1).build());
         semesterRepository.save(Semester.builder().code("I").name("Học kỳ 2").startDay(22).startMonth(1).endDay(25).endMonth(5).build());
