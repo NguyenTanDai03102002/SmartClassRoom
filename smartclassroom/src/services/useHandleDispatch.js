@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import {
     //User
     userLogin,
+    getAllTeacher,
 
     //Grade
     getAllGrade,
@@ -15,6 +16,11 @@ import {
     //CLassEntity
     getAllClassesByYear,
     createClass,
+    editClass,
+    cpyData,
+    deleteClass,
+
+    //
     getAllClassesByYearAndBlock,
     importStudentsFromExcel,
     putAllTeachersToClasses,
@@ -23,7 +29,6 @@ import {
     addstudenttoclass,
     EditStudentInClass,
     getAllTeacherPage,
-    getAllTeacher,
     importTeachersFromExcel,
     addteacher,
     editteacher,
@@ -31,7 +36,7 @@ import {
     GetAllSubject,
     XepGiangDay,
     GetGiangDayByTeacherId,
-    deleteClass,
+    refreshToken,
 } from './axios';
 import authSlice from '../ReducerSlice/authSlice';
 import classesSlice from '../ReducerSlice/classesSlice';
@@ -50,9 +55,11 @@ export const useHandleDispatch = () => {
     //Authentication
 
     const logoutUser = () => {
-        dispatch(authSlice.actions.LOGOUT_SUCCESS());
-        showSuccessMessage('Logout thành công');
-        navigate('/login');
+        try {
+            dispatch(authSlice.actions.LOGOUT_SUCCESS());
+            showSuccessMessage('Logout thành công');
+            navigate('/login');
+        } catch (error) {}
     };
 
     const loginUser = async (datalogin, setDatalogin, usernameInputRef, prevPathname) => {
@@ -94,11 +101,33 @@ export const useHandleDispatch = () => {
             }
         }
     };
+
+    const refreshtoken = async (token) => {
+        try {
+            const response = await refreshToken(token);
+            if (response.data.code === 1000) {
+                dispatch(authSlice.actions.REFESH_TOKEN(response.data.result.token));
+            }
+        } catch (error) {}
+    };
+    //USER
+    const getallteacher = async (token) => {
+        try {
+            dispatch(teacherSlice.actions.FETCH_ALL_TEACHERS_REQUEST());
+            const response = await getAllTeacher(token);
+            if (response.data.code === 1000) {
+                dispatch(teacherSlice.actions.FETCH_ALL_TEACHERS_SUCCESS(response.data.result));
+            }
+        } catch (error) {
+            dispatch(teacherSlice.actions.FETCH_ALL_TEACHERS_FAILURE(error.response.data.message));
+        }
+    };
+
     //Schoolyear
-    const getallschoolyear = async () => {
+    const getallschoolyear = async (keyWord = '') => {
         try {
             dispatch(schoolSlice.actions.FETCH_ALL_SchoolYears_REQUEST());
-            const response = await getAllSchoolYear();
+            const response = await getAllSchoolYear(keyWord);
             if (response.data.code === 1000) {
                 dispatch(schoolSlice.actions.FETCH_ALL_SchoolYears_SUCCESS(response.data.result));
             }
@@ -108,10 +137,10 @@ export const useHandleDispatch = () => {
     };
 
     //ClassEntity
-    const getallclassesbyyear = async (id) => {
+    const getallclassesbyyear = async (id, keyWord = '') => {
         try {
             dispatch(classesSlice.actions.FETCH_ALL_CLASSES_REQUEST());
-            const response = await getAllClassesByYear(id);
+            const response = await getAllClassesByYear(id, keyWord);
             if (response.data.code === 1000) {
                 dispatch(classesSlice.actions.FETCH_ALL_CLASSES_SUCCESS(response.data.result));
             }
@@ -124,17 +153,35 @@ export const useHandleDispatch = () => {
         try {
             const response = await createClass(token, dataAdd);
             if (response.data.code === 1000) {
-                return true;
+                return response.data;
             }
-        } catch (error) {}
+        } catch (error) {
+            return error.response.data;
+        }
     };
-
+    const editclass = async (token, dataEdit) => {
+        try {
+            const response = await editClass(token, dataEdit);
+            if (response.data.code === 1000) {
+                return response.data;
+            }
+        } catch (error) {
+            return error.response.data;
+        }
+    };
     const deleteclass = async (token, dataDel) => {
         try {
             await deleteClass(token, dataDel);
         } catch (error) {}
     };
 
+    const cpydata = async (token, schoolYearId) => {
+        try {
+            await cpyData(token, schoolYearId);
+        } catch (error) {
+            return error.response.data;
+        }
+    };
     //Grade
     const getallgrade = async () => {
         try {
@@ -148,6 +195,8 @@ export const useHandleDispatch = () => {
         }
     };
 
+    //
+
     const fecthClasses = (year, blockid) => {
         dispatch(classesSlice.actions.FETCH_ALL_CLASSES_REQUEST());
 
@@ -157,15 +206,6 @@ export const useHandleDispatch = () => {
             })
             .catch((error) => {
                 dispatch(classesSlice.actions.FETCH_ALL_CLASSES_FAILURE(error.message));
-            });
-    };
-    const fetchTeachers = (token) => {
-        getAllTeacher(token)
-            .then((reponse) => {
-                dispatch(teacherSlice.actions.FETCH_ALL_TEACHERS_SUCCESS(reponse.data));
-            })
-            .catch((error) => {
-                dispatch(teacherSlice.actions.FETCH_ALL_TEACHERS_FAILURE(error.message));
             });
     };
 
@@ -340,6 +380,8 @@ export const useHandleDispatch = () => {
         //User
         logoutUser,
         loginUser,
+        refreshtoken,
+        getallteacher,
 
         //SchoolYear
         getallschoolyear,
@@ -348,12 +390,13 @@ export const useHandleDispatch = () => {
         getallclassesbyyear,
         createclass,
         deleteclass,
+        editclass,
+        cpydata,
 
         //Grade
         getallgrade,
 
         fecthClasses,
-        fetchTeachers,
         fetchTeachersPage,
         putteacherstoclasses,
         importteachersExcel,

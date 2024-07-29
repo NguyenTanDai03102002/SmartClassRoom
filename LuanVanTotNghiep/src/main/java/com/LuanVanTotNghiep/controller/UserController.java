@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.LuanVanTotNghiep.Mapper.UserMapper;
+import com.LuanVanTotNghiep.dto.response.ApiResponse;
 import com.LuanVanTotNghiep.models.User;
 import com.LuanVanTotNghiep.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ import com.LuanVanTotNghiep.dto.response.UserResponse;
 import com.LuanVanTotNghiep.service.UserService;
 
 @RestController
-@RequestMapping
+@RequestMapping("/user")
 @CrossOrigin("*")
 public class UserController {
   
@@ -42,12 +43,15 @@ public class UserController {
 
     @Autowired
     private UserMapper userMapper;
-   
-    @GetMapping("/getImage/{userid}")
-    public ResponseEntity<ByteArrayResource> getImage(@PathVariable Long userid) throws IOException{
-    	return userService.getImageMainUrlFromUser(userid);
-    		
+
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/getAllTeacher")
+    public ApiResponse<List<UserResponse>> getAllTeacher() {
+        return userService.getAllTeacher();
     }
+
+
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/user")
@@ -57,12 +61,10 @@ public class UserController {
                 .collect(Collectors.toList());
     }
 
-	
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/teacher")
-    public List<UserResponse> getAllTeacher() {
-    	return userService.getAllTeacher();
-    }
+
+
+
+
     
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/teacher-page")

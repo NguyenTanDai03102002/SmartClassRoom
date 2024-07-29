@@ -11,17 +11,27 @@ import TextField from '@mui/material/TextField';
 
 const cx = classNames.bind(Styles);
 
-function Index({ title, headCells, data, editRecord, deleteRecord, handleSearch }) {
+function Index({
+    title,
+    headCells,
+    data = [],
+    handleShowEdit,
+    handleDelete,
+    handleSearch = () => {},
+    action = false,
+    checkBox = false,
+}) {
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState();
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(7);
     const [selected, setSelected] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         handleSearch(searchQuery);
-    }, [searchQuery, handleSearch]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchQuery]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -63,7 +73,7 @@ function Index({ title, headCells, data, editRecord, deleteRecord, handleSearch 
         setSelected(newSelected);
     };
 
-    const isAllSelected = data.length > 0 && selected.length === data.length;
+    const isAllSelected = data && data.length > 0 && selected.length === data.length;
 
     const stableSort = (array, comparator) => {
         const stabilizedThis = array.map((el, index) => [el, index]);
@@ -106,7 +116,12 @@ function Index({ title, headCells, data, editRecord, deleteRecord, handleSearch 
 
     const visibleRows = useMemo(
         () =>
-            stableSort(data, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+            data && data.length > 0
+                ? stableSort(data, getComparator(order, orderBy)).slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage,
+                  )
+                : [],
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [order, orderBy, page, rowsPerPage, data],
     );
@@ -127,7 +142,7 @@ function Index({ title, headCells, data, editRecord, deleteRecord, handleSearch 
                         style: { fontSize: '1.4rem' },
                     }}
                 />
-                <TableContainer sx={{ maxHeight: 440 }}>
+                <TableContainer>
                     <Table stickyHeader aria-label="sticky table">
                         <Head
                             title={title}
@@ -140,23 +155,27 @@ function Index({ title, headCells, data, editRecord, deleteRecord, handleSearch 
                             onSelectAllClick={handleSelectAllClick}
                             isAllSelected={isAllSelected}
                             rowCount={data.length}
-                            deleteRecord={deleteRecord}
+                            handleDelete={handleDelete}
                             selected={selected}
                             setSelected={setSelected}
+                            action={action}
+                            checkBox={checkBox}
                         />
                         <Body
                             data={data}
                             headCells={headCells}
                             visibleRows={visibleRows}
-                            editRecord={editRecord}
+                            handleShowEdit={handleShowEdit}
                             selected={selected}
                             setSelected={setSelected}
                             handleClick={handleClick}
+                            action={action}
+                            checkBox={checkBox}
                         />
                     </Table>
                 </TableContainer>
                 <TablePagination
-                    rowsPerPageOptions={[5, 10, 15]}
+                    rowsPerPageOptions={[5, 7, 10]}
                     component="div"
                     count={data.length}
                     rowsPerPage={rowsPerPage}

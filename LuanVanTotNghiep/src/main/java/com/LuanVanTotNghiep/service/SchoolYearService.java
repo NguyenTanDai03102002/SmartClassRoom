@@ -6,5 +6,5 @@ import com.LuanVanTotNghiep.dto.response.SchoolYearResponse;
 import java.util.List;
 
 public interface SchoolYearService {
-    ApiResponse<List<SchoolYearResponse>> getAll();
+    ApiResponse<List<SchoolYearResponse>> getAll(String keyword);
 }

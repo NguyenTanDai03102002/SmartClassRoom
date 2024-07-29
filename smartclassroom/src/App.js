@@ -8,12 +8,16 @@ import Headeronly from './Admin/component/layout/headeronly/Headeronly';
 import DefaultLayout from './Admin/component/layout/defaultlayout/DefaultLayout';
 import HearderAndFooter from './User/Layout/HeaderAndFooter/Index';
 import Gototop from './Component/GoToTop/Index';
+import useTokenRefresh from './Scheduler/useTokenRefresh';
 // import HostLine from './Component/HostLine/Index';
 // import Chat from './Component/Chat/Index';
 
 function App() {
+    useTokenRefresh();
+
+    const user = useSelector(authUser);
+
     const RequireAuth = ({ children, requireAuth }) => {
-        const user = useSelector(authUser);
         const location = useLocation();
         if (requireAuth && !user) {
             return <Navigate to="/login" state={{ from: location.pathname }} />;
@@ -23,39 +27,39 @@ function App() {
 
     return (
         <>
-            <Router>
-                <div className="App">
-                    <Routes>
-                        {pageRoutes.map((item, index) => {
-                            let Layout;
+            {/* <Router> */}
+            <div className="App">
+                <Routes>
+                    {pageRoutes.map((item, index) => {
+                        let Layout;
 
-                            if (item.layout === DefaultLayout) {
-                                Layout = item.layout;
-                            } else if (item.layout === Headeronly) {
-                                Layout = item.layout;
-                            } else if (item.layout === null) {
-                                Layout = Fragment;
-                            } else if (item.layout === HearderAndFooter) {
-                                Layout = item.layout;
-                            }
+                        if (item.layout === DefaultLayout) {
+                            Layout = item.layout;
+                        } else if (item.layout === Headeronly) {
+                            Layout = item.layout;
+                        } else if (item.layout === null) {
+                            Layout = Fragment;
+                        } else if (item.layout === HearderAndFooter) {
+                            Layout = item.layout;
+                        }
 
-                            return (
-                                <Route
-                                    key={index}
-                                    path={item.path}
-                                    element={
-                                        <Layout>
-                                            <RequireAuth requireAuth={item.requireAuth}>
-                                                <item.Component />
-                                            </RequireAuth>
-                                        </Layout>
-                                    }
-                                />
-                            );
-                        })}
-                    </Routes>
-                </div>
-            </Router>
+                        return (
+                            <Route
+                                key={index}
+                                path={item.path}
+                                element={
+                                    <Layout>
+                                        <RequireAuth requireAuth={item.requireAuth}>
+                                            <item.Component />
+                                        </RequireAuth>
+                                    </Layout>
+                                }
+                            />
+                        );
+                    })}
+                </Routes>
+            </div>
+            {/* </Router> */}
             {/* {window.location.pathname.startsWith('/admin') || window.location.pathname === '/login' ? null : (
                 <>
                     <Chat />

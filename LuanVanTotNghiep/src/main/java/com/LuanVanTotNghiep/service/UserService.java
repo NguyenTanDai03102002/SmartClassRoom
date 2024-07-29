@@ -2,6 +2,7 @@ package com.LuanVanTotNghiep.service;
 
 import java.util.List;
 
+import com.LuanVanTotNghiep.dto.response.ApiResponse;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.LuanVanTotNghiep.dto.response.UserResponse;
 
 public interface UserService {
-	List<UserResponse> getAllTeacher();
+	ApiResponse<List<UserResponse>> getAllTeacher();
 
 	ResponseEntity<ByteArrayResource> getImageMainUrlFromUser(Long userid);
 

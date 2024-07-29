@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -21,6 +22,7 @@ public class UserResponse {
 	 int sex;
 	 String imageUrl;
 	 String email;
+	 @JsonIgnore
 	 String password;
 	 String job;
 	 String ethnicity;

@@ -10,7 +10,16 @@ import Checkbox from '@mui/material/Checkbox';
 
 const cx = classNames.bind(Styles);
 
-function Index({ visibleRows, data, headCells, editRecord, selected, handleClick }) {
+function Index({
+    visibleRows,
+    data,
+    headCells,
+    handleShowEdit,
+    selected,
+    handleClick,
+    action = false,
+    checkBox = false,
+}) {
     const getNestedValue = (obj, path) => {
         return path.split('.').reduce((acc, key) => (acc && acc[key] ? acc[key] : null), obj);
     };
@@ -30,7 +39,7 @@ function Index({ visibleRows, data, headCells, editRecord, selected, handleClick
                     return (
                         <TableRow
                             hover
-                            onClick={(event) => handleClick(event, row.id)}
+                            onClick={checkBox ? (event) => handleClick(event, row.id) : undefined}
                             role="checkbox"
                             aria-checked={isItemSelected}
                             tabIndex={-1}
@@ -38,27 +47,31 @@ function Index({ visibleRows, data, headCells, editRecord, selected, handleClick
                             selected={isItemSelected}
                             sx={{ cursor: 'pointer' }}
                         >
-                            <TableCell padding="checkbox">
-                                <Checkbox
-                                    color="primary"
-                                    checked={isItemSelected}
-                                    inputProps={{
-                                        'aria-labelledby': labelId,
-                                    }}
-                                />
-                            </TableCell>
+                            {checkBox && (
+                                <TableCell padding="checkbox">
+                                    <Checkbox
+                                        color="primary"
+                                        checked={isItemSelected}
+                                        inputProps={{
+                                            'aria-labelledby': labelId,
+                                        }}
+                                    />
+                                </TableCell>
+                            )}
                             {headCells.map((cell) => (
                                 <TableCell key={cell.id} className={cx('datarow')}>
                                     {getNestedValue(row, cell.id) || 'không có dữ liệu'}
                                 </TableCell>
                             ))}
-                            <TableCell className={cx('datarow')}>
-                                <div className={cx('actions')}>
-                                    <div className={cx('edit')} onClick={(e) => editRecord(e, row)}>
-                                        <EditIcon />
+                            {action && (
+                                <TableCell className={cx('datarow')}>
+                                    <div className={cx('actions')}>
+                                        <div className={cx('edit')} onClick={(e) => handleShowEdit(e, row)}>
+                                            <EditIcon />
+                                        </div>
                                     </div>
-                                </div>
-                            </TableCell>
+                                </TableCell>
+                            )}
                         </TableRow>
                     );
                 })

@@ -1,7 +1,6 @@
 import Menu from '../../../../Component/popper/Menu/Menu';
 import Styles from './Header.module.scss';
 import classNames from 'classnames/bind';
-import Button from '../../../../Component/button/Button';
 import anhmacdinh from '../../../../Component/Image/anhdaidien.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOut, faUser } from '@fortawesome/free-solid-svg-icons';
@@ -9,7 +8,6 @@ import { useSelector } from 'react-redux';
 import { authUser } from '../../../../redux/selectors';
 import { useHandleDispatch } from '../../../../services/useHandleDispatch';
 import { useNavigate } from 'react-router-dom';
-import ADMINImg from '../../../../Component/Image/ADMIN.jpg';
 
 const cx = classNames.bind(Styles);
 
@@ -36,7 +34,11 @@ function Header() {
     return (
         <header className={cx('wrapper')}>
             <div className={cx('header-left')}>
-                <img src={ADMINImg} alt="anh" onClick={() => navigate('/admin')}></img>
+                <img
+                    src="https://res.cloudinary.com/danrswhe6/image/upload/v1722039908/Icon-ADMIN_fmd82o.png"
+                    alt="anh"
+                    onClick={() => navigate('/admin')}
+                ></img>
             </div>
             <h2>HỆ THỐNG QUẢN LÝ</h2>
             <div className={cx('r')}>

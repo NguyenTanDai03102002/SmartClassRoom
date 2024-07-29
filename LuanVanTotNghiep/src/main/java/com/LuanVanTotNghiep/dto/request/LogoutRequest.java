@@ -1,5 +1,6 @@
 package com.LuanVanTotNghiep.dto.request;
 
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -8,7 +9,6 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ClassEntityRequest {
-    String name;
-    Long teacherId;
+public class LogoutRequest {
+    String token;
 }

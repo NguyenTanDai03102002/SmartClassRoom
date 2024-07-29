@@ -6,21 +6,45 @@ const API_BASE_URL = 'http://localhost:8070/';
 export const userLogin = (dataLogin) => {
     return axios.post(API_BASE_URL + 'auth/login', dataLogin);
 };
+export const refreshToken = (token) => {
+    return axios.post(API_BASE_URL + 'auth/refresh', token);
+};
+
+//USER
+export const getAllTeacher = (token) => {
+    return axios.get(API_BASE_URL + `user/getAllTeacher`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
 
 //SchoolYearControler
-export const getAllSchoolYear = () => {
-    return axios.get(API_BASE_URL + 'schoolYear/getAll');
+export const getAllSchoolYear = (keyword) => {
+    return axios.get(API_BASE_URL + `schoolYear/getAll?keyword=${keyword}`);
 };
 
 //ClassEntityController
-export const getAllClassesByYear = (yearId) => {
-    return axios.get(API_BASE_URL + 'classEntity/getAllBySchoolYear?schoolYearId=' + yearId);
+export const getAllClassesByYear = (yearId, keyWord) => {
+    return axios.get(API_BASE_URL + `classEntity/getAllBySchoolYear?schoolYearId=${yearId}&keyword=${keyWord}`);
 };
 
 export const createClass = (token, dataAdd) => {
     return axios.post(
         API_BASE_URL + `classEntity/createClass?schoolYearId=${dataAdd.schoolYearId}&gradeId=${dataAdd.gradeId}`,
-        { name: dataAdd.name },
+        { name: dataAdd.name, teacherId: dataAdd.teacherId },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    );
+};
+export const editClass = (token, dataEdit) => {
+    return axios.put(
+        API_BASE_URL +
+            `classEntity/editClass/${dataEdit.id}?schoolYearId=${dataEdit.schoolYearId}&gradeId=${dataEdit.gradeId}`,
+        { name: dataEdit.name, teacherId: dataEdit.teacherId },
         {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -29,7 +53,7 @@ export const createClass = (token, dataAdd) => {
     );
 };
 export const deleteClass = (token, dataDel) => {
-    return axios.delete(API_BASE_URL + 'classEntity/deleteClass', {
+    return axios.delete(API_BASE_URL + `classEntity/deleteClass`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -37,24 +61,30 @@ export const deleteClass = (token, dataDel) => {
     });
 };
 
+export const cpyData = (token, schoolYearId) => {
+    return axios.post(
+        API_BASE_URL + `classEntity/cpyData?schoolYearId=${schoolYearId}`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    );
+};
+
 //GradeController
 export const getAllGrade = () => {
     return axios.get(API_BASE_URL + 'grade/getAll');
 };
 
+//
 export const getAllClassesByYearAndBlock = (year, blockid) => {
     return axios.get(
         API_BASE_URL + (year ? 'classes?year=' + year : 'classes') + (blockid ? '?khoiid=' + blockid : ''),
     );
 };
 
-export const getAllTeacher = (token) => {
-    return axios.get(API_BASE_URL + 'teacher', {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
-};
 export const getAllTeacherPage = (token, currentPage, keyword) => {
     return axios.get(API_BASE_URL + 'teacher-page?page=' + currentPage + '&keyword=' + keyword, {
         headers: {

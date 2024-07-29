@@ -39,13 +39,17 @@ public class DataInitializer implements CommandLineRunner {
         if(roleRepository.findByName("ADMIN") != null) return;
         Role adminRole = roleRepository.save(Role.builder().name("ADMIN").build());
         Role userRole = roleRepository.save(Role.builder().name("USER").build());
-        roleRepository.save(Role.builder().name("TEACHER").build());
+        Role TeacherRole = roleRepository.save(Role.builder().name("TEACHER").build());
 
         Set<Role> adminRoles = new HashSet<>();
         adminRoles.add(adminRole);
 
         Set<Role> userRoles = new HashSet<>();
         userRoles.add(userRole);
+
+        Set<Role> TeacherRoles = new HashSet<>();
+        TeacherRoles.add(TeacherRole);
+
 
         userRepository.save(User.builder().userCode("AD000001").fullName("admin")
                 .password(passwordEncode.encode("admin"))
@@ -55,6 +59,16 @@ public class DataInitializer implements CommandLineRunner {
         userRepository.save(User.builder().userCode("US000001").fullName("user")
                 .password(passwordEncode.encode("user"))
                 .roles(userRoles).build());
+
+        userRepository.save(User.builder().userCode("TC000001").fullName("teacher1")
+                .password(passwordEncode.encode("1"))
+                .roles(TeacherRoles).build());
+        userRepository.save(User.builder().userCode("TC000002").fullName("teacher2")
+                .password(passwordEncode.encode("2"))
+                .roles(TeacherRoles).build());
+        userRepository.save(User.builder().userCode("TC000003").fullName("teacher3")
+                .password(passwordEncode.encode("3"))
+                .roles(TeacherRoles).build());
 
 
         Grade grade10 = gradeRepository.save(Grade.builder().grade(10).build());
@@ -81,14 +95,14 @@ public class DataInitializer implements CommandLineRunner {
         subjectRepository.save(Subject.builder().name("Thể dục").build());
         subjectRepository.save(Subject.builder().name("Giáo dục Quốc phòng - An ninh").build());
 
-        classEntityRepository.save(ClassEntity.builder().name("10A1").grade(grade10).schoolYear(schoolYear2).build());
-        classEntityRepository.save(ClassEntity.builder().name("10A2").grade(grade10).schoolYear(schoolYear2).build());
-        classEntityRepository.save(ClassEntity.builder().name("10A3").grade(grade10).schoolYear(schoolYear2).build());
-        classEntityRepository.save(ClassEntity.builder().name("11A1").grade(grade11).schoolYear(schoolYear2).build());
-        classEntityRepository.save(ClassEntity.builder().name("11A2").grade(grade11).schoolYear(schoolYear2).build());
-        classEntityRepository.save(ClassEntity.builder().name("11A3").grade(grade11).schoolYear(schoolYear2).build());
-        classEntityRepository.save(ClassEntity.builder().name("12A1").grade(grade12).schoolYear(schoolYear2).build());
-        classEntityRepository.save(ClassEntity.builder().name("12A2").grade(grade12).schoolYear(schoolYear2).build());
-        classEntityRepository.save(ClassEntity.builder().name("12A3").grade(grade12).schoolYear(schoolYear2).build());
+//        classEntityRepository.save(ClassEntity.builder().name("10A1").grade(grade10).schoolYear(schoolYear2).build());
+//        classEntityRepository.save(ClassEntity.builder().name("10A2").grade(grade10).schoolYear(schoolYear2).build());
+//        classEntityRepository.save(ClassEntity.builder().name("10A3").grade(grade10).schoolYear(schoolYear2).build());
+//        classEntityRepository.save(ClassEntity.builder().name("11A1").grade(grade11).schoolYear(schoolYear2).build());
+//        classEntityRepository.save(ClassEntity.builder().name("11A2").grade(grade11).schoolYear(schoolYear2).build());
+//        classEntityRepository.save(ClassEntity.builder().name("11A3").grade(grade11).schoolYear(schoolYear2).build());
+//        classEntityRepository.save(ClassEntity.builder().name("12A1").grade(grade12).schoolYear(schoolYear2).build());
+//        classEntityRepository.save(ClassEntity.builder().name("12A2").grade(grade12).schoolYear(schoolYear2).build());
+//        classEntityRepository.save(ClassEntity.builder().name("12A3").grade(grade12).schoolYear(schoolYear2).build());
     }
 }

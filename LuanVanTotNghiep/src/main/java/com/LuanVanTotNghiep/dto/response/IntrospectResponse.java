@@ -1,4 +1,4 @@
-package com.LuanVanTotNghiep.dto.request;
+package com.LuanVanTotNghiep.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,7 +8,6 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ClassEntityRequest {
-    String name;
-    Long teacherId;
+public class IntrospectResponse {
+    boolean valid;
 }

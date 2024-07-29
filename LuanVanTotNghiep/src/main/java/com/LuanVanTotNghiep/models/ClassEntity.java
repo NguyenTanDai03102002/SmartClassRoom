@@ -37,7 +37,7 @@ public class ClassEntity {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "gvcv")
-	private User teacher;
+	private User classTeacher;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "year_id")

@@ -8,7 +8,6 @@ import DanhSachLopHocTheoKhoi from '../Admin/pages/QuanLyLopHoc/DanhSachLopTheoK
 import DanhSachLopHocTheoNam from '../Admin/pages/QuanLyLopHoc/DanhSachLopHocMoiNam/Index';
 import QuanLyHocSinh from '../Admin/pages/QuanLyHocSinh/Hocsinh';
 import QuanLyDiem from '../Admin/pages/QuanLyDiem/Diem';
-import XepChuNhiem from '../Admin/pages/XepChuNhiem/Index';
 import XepGiangDay from '../Admin/pages/XepGiangDay/Index';
 import XepGiangDayClass from '../Admin/pages/XepGiangDay/Class/Index';
 import XemGiangDay from '../Admin/pages/XemLichGiangDay/Index';
@@ -63,7 +62,6 @@ const pageRoutes = [
         requireAuth: true,
     },
     { path: '/admin/quan-ly-giao-vien', Component: QuanLyGiaoVien, layout: Headeronly, requireAuth: true },
-    { path: '/admin/xep-lich-chu-nhiem', Component: XepChuNhiem, layout: Headeronly, requireAuth: true },
     { path: '/admin/xep-lich-Giang-Day', Component: XepGiangDay, layout: Headeronly, requireAuth: true },
     { path: '/admin/xep-lich-Giang-Day/:classid', Component: XepGiangDayClass, layout: Headeronly, requireAuth: true },
     { path: '/admin/xem-lich-Giang-Day', Component: XemGiangDay, layout: Headeronly, requireAuth: true },

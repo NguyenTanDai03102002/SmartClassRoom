@@ -18,6 +18,7 @@ const authSlice = createSlice({
             state.loading = false;
             localStorage.setItem('user', JSON.stringify(action.payload.user));
             localStorage.setItem('token', action.payload.token);
+            localStorage.setItem('expiryTime', Date.now() + 50 * 60 * 1000);
         },
         LOGIN_FAILURE: (state, action) => {
             state.error = action.payload;
@@ -28,52 +29,14 @@ const authSlice = createSlice({
             state.token = null;
             localStorage.removeItem('user');
             localStorage.removeItem('token');
+            localStorage.removeItem('expiryTime');
+        },
+
+        REFESH_TOKEN: (state, action) => {
+            localStorage.removeItem('token');
+            localStorage.setItem('token', action.payload);
+            state.token = action.payload;
         },
     },
 });
 export default authSlice;
-
-// const initialState = {
-//     user: JSON.parse(localStorage.getItem('user')) || null,
-//     token: localStorage.getItem('token') || null,
-//     loading: false,
-//     error: null,
-// };
-
-// const AuthReducer = (state = initialState, action) => {
-//     switch (action.type) {
-//         case 'LOGIN_REQUEST':
-//             return {
-//                 ...state,
-//                 loading: true,
-//             };
-//         case 'LOGIN_SUCCESS':
-//             localStorage.setItem('user', JSON.stringify(action.payload.user));
-//             localStorage.setItem('token', action.payload.token);
-//             return {
-//                 ...state,
-//                 user: action.payload.user,
-//                 token: action.payload.token,
-//                 loading: false,
-//             };
-//         case 'LOGIN_FAILURE':
-//             return {
-//                 ...state,
-//                 error: action.payload,
-//                 loading: false,
-//             };
-//         case 'LOGOUT_SUCCESS':
-//             localStorage.removeItem('user');
-//             localStorage.removeItem('token');
-//             return {
-//                 ...state,
-//                 user: null,
-//                 token: null,
-//             };
-
-//         default:
-//             return state;
-//     }
-// };
-
-// export default AuthReducer;

@@ -8,7 +8,6 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ClassEntityRequest {
-    String name;
-    Long teacherId;
+public class IntrospectRequest {
+    String token;
 }

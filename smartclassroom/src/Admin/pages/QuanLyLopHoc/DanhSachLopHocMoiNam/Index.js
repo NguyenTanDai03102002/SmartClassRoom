@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 import Styles from './DanhSachTheoNam.module.scss';
 import { useHandleDispatch } from '../../../../services/useHandleDispatch';
 import { useSelector } from 'react-redux';
-import { Classes, Grades, schoolYears, userToken } from '../../../../redux/selectors';
+import { Classes, Grades, schoolYears, Teachers, userToken } from '../../../../redux/selectors';
 import {
     showBeforeDelete,
     showErrorMessage,
@@ -14,6 +14,7 @@ import Modal from '../../../../Component/Modal/Index';
 import Input from '../../../../Component/Input/Index';
 import MuiTable from '../../../../Component/MuiTable/Index';
 import AddIcon from '@mui/icons-material/Add';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import SelectOption from '../../../../Component/SelectOption/Index';
 
 const cx = classNames.bind(Styles);
@@ -22,22 +23,51 @@ function Index() {
     const headCells = [
         { id: 'name', label: 'Tên lớp học' },
         { id: 'grade.grade', label: 'Khối' },
-        { id: 'classTeacher', label: 'Giáo viên chủ nhiệm' },
+        { id: 'classTeacher.fullName', label: 'Giáo viên chủ nhiệm' },
     ];
     const token = useSelector(userToken);
-    const [dataAdd, setDataAdd] = useState({ name: '', schoolYearId: null, gradeId: null });
+    const [dataAdd, setDataAdd] = useState({ name: '', schoolYearId: null, gradeId: null, teacherId: null });
     const [showModal, setShowModal] = useState(false);
-    const [schoolYearId, setSchoolYearId] = useState();
-    const { getallschoolyear, getallclassesbyyear, getallgrade, createclass, deleteclass } = useHandleDispatch();
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [keyWord, setKeyWord] = useState('');
+    const [keyWordSchoolYear, setKeyWordSchoolYear] = useState();
+    const [YearId, setYearId] = useState();
+    const {
+        getallschoolyear,
+        getallclassesbyyear,
+        getallgrade,
+        createclass,
+        deleteclass,
+        editclass,
+        cpydata,
+        getallteacher,
+    } = useHandleDispatch();
     const SchoolYears = useSelector(schoolYears);
     const classes = useSelector(Classes);
     const grades = useSelector(Grades);
+    const teachers = useSelector(Teachers);
     const nameref = useRef();
+    useEffect(() => {
+        getallclassesbyyear('', '');
+    }, []);
 
     useEffect(() => {
-        getallschoolyear();
+        getallschoolyear(keyWordSchoolYear);
+        getallteacher(token);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [keyWordSchoolYear]);
+
+    useEffect(() => {
+        if (YearId) {
+            getallclassesbyyear(YearId, keyWord);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [keyWord]);
+
+    const dataformatOptionOfTeacher = teachers.map((teacher) => ({
+        id: teacher.id,
+        nameOption: `${teacher.userCode} - ${teacher.fullName}`,
+    }));
 
     const dataformatOptionOfSchoolYear = SchoolYears.map((year) => ({
         id: year.id,
@@ -50,7 +80,7 @@ function Index() {
 
     const handleChangeOptionSchoolYear = (id) => {
         getallclassesbyyear(id);
-        setSchoolYearId(id);
+        setYearId(id);
     };
     const handleChangeOptionGrade = (id) => {
         setDataAdd((pre) => ({
@@ -58,67 +88,115 @@ function Index() {
             gradeId: id,
         }));
     };
+    const handleChangeOptionTeacher = (id) => {
+        setDataAdd((pre) => ({
+            ...pre,
+            teacherId: id,
+        }));
+    };
     const handleChangeName = (e) => {
         setDataAdd({ ...dataAdd, [e.target.name]: e.target.value });
     };
-    const editRecord = (e, row) => {
+    const showmodal = async () => {
+        setShowModal(true);
+        setIsEditMode(false);
+        setDataAdd({ ...dataAdd, schoolYearId: YearId });
+        getallgrade();
+    };
+
+    const handleShowEdit = (e, row) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log(row);
+        showmodal();
+        setDataAdd({
+            id: row.id,
+            name: row.name,
+            schoolYearId: YearId,
+            gradeId: row.grade.id,
+            teacherId: row.classTeacher?.id,
+        });
+        setIsEditMode(true);
     };
-    const deleteRecord = (dataDel) => {
-        showBeforeDelete(` Bạn muốn xóa :)`).then(async (result) => {
+
+    const handleSubmitEdit = async () => {
+        const response = await editclass(token, dataAdd);
+        if (response.code === 1000) {
+            showSuccessMessage('Chỉnh sửa thành công');
+            getallclassesbyyear(YearId);
+            oncloseModal();
+        } else {
+            showErrorMessage(response.message);
+        }
+    };
+
+    const handleDelete = (dataDel) => {
+        showBeforeDelete(`Bạn muốn xóa :)`).then(async (result) => {
             if (result.isConfirmed) {
                 await deleteclass(token, dataDel);
-                getallclassesbyyear(schoolYearId);
+                getallclassesbyyear(YearId);
                 showSuccessMessage('Bạn xóa mất tiêu rồi :(');
             } else {
-                showErrorMessage('Bạn đừng phân vân nữa hay quyết đoán lên nè hihi :)');
+                showErrorMessage('Bạn đừng phân vân nữa:)');
             }
         });
     };
 
-    const showmodal = async () => {
-        setShowModal(true);
-        setDataAdd({ ...dataAdd, schoolYearId: schoolYearId });
-        getallgrade();
-    };
-
     const oncloseModal = () => {
-        setShowModal(false);
-        setDataAdd({ ...dataAdd, name: '', khoiId: null });
+        setShowModal();
+        setIsEditMode(false);
+        setDataAdd({ ...dataAdd, name: '', gradeId: null, teacherId: null });
     };
     const handleSubmitAdd = async () => {
-        if (nameref.current?.validity?.valid && dataAdd.gradeId != null) {
+        if (nameref.current?.validity?.valid && dataAdd.gradeId != null && dataAdd.teacherId != null) {
             const response = await createclass(token, dataAdd);
-            if (response === true) {
+            if (response?.code === 1000) {
                 showSuccessMessage('Thêm thành công');
                 oncloseModal();
-                getallclassesbyyear(schoolYearId);
+                getallclassesbyyear(YearId);
             } else {
-                showErrorMessage('Lỗi mất tiêu rồi');
+                showErrorMessage(response?.message || 'Lỗi không xác định');
             }
         } else {
             showWarningMessage('Lỗi dữ liệu');
         }
     };
     const handleSearch = (dataSearch) => {
-        // console.log(dataSearch);
+        setKeyWord(dataSearch);
+    };
+    const handleSearchChangeSchoolYear = (event) => {
+        setKeyWordSchoolYear(event.target.value);
     };
 
+    const handleCoppy = async () => {
+        const response = await cpydata(token, YearId);
+        if (response) {
+            showErrorMessage(response.message);
+        } else {
+            showSuccessMessage('Thành công');
+            getallclassesbyyear(YearId);
+        }
+    };
     return (
         <div className={cx('wrapper')}>
             <div className={cx('header')}>
                 <div className={cx('select-option')}>
                     <SelectOption
                         title="Chọn năm học"
+                        handleSearchChange={handleSearchChangeSchoolYear}
                         dataOptions={dataformatOptionOfSchoolYear}
                         onclick={(id) => handleChangeOptionSchoolYear(id)}
+                        selectedOption={YearId}
                     />
                 </div>
-                {schoolYearId && (
-                    <div className={cx('add')} onClick={showmodal}>
-                        <AddIcon /> Add
+                {YearId && (
+                    <div className={cx('action')}>
+                        <div className={cx('coppy')} onClick={handleCoppy}>
+                            <ContentCopyIcon />
+                            Coppy data
+                        </div>
+                        <div className={cx('add')} onClick={showmodal}>
+                            <AddIcon /> Add
+                        </div>
                     </div>
                 )}
             </div>
@@ -126,13 +204,22 @@ function Index() {
                 title="DANH SÁCH LỚP HỌC"
                 headCells={headCells}
                 data={classes}
-                editRecord={editRecord}
-                deleteRecord={deleteRecord}
+                handleShowEdit={handleShowEdit}
+                handleDelete={handleDelete}
                 handleSearch={handleSearch}
+                action
+                checkBox
             />
             {showModal && (
                 <div className={cx('modal')}>
-                    <Modal title="Thông Tin Lớp Học" save onClose={oncloseModal} handleSubmitAdd={handleSubmitAdd}>
+                    <Modal
+                        edit={isEditMode}
+                        title="Thông Tin Lớp Học"
+                        save={!isEditMode}
+                        onClose={oncloseModal}
+                        handleSubmitAdd={handleSubmitAdd}
+                        handleSubmitEdit={handleSubmitEdit}
+                    >
                         <Input
                             refer={nameref}
                             spellCheck="false"
@@ -149,6 +236,13 @@ function Index() {
                             title="Chọn khối"
                             dataOptions={dataformatOptionOfGrade}
                             onclick={(id) => handleChangeOptionGrade(id)}
+                            selectedOption={dataAdd.gradeId}
+                        />
+                        <SelectOption
+                            title="Chọn giáo viên chủ nhiệm"
+                            dataOptions={dataformatOptionOfTeacher}
+                            onclick={(id) => handleChangeOptionTeacher(id)}
+                            selectedOption={dataAdd.teacherId}
                         />
                     </Modal>
                 </div>

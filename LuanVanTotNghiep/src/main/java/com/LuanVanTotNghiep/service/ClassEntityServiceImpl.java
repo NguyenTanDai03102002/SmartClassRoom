@@ -64,30 +64,74 @@ public class ClassEntityServiceImpl implements ClassEntityService {
     private final String IMAGE_DIRECTORY = "src/main/resources/static/assets/img/";
 
 	@Override
-	public ApiResponse<List<ClassEntityResponse>> getAllBySchoolYear(Long schoolYearId) {
-		SchoolYear schoolYear = schoolYearRepository.findById(schoolYearId).orElseThrow(() -> new AppException(ErrorCode.YEAR_NOT_EXISTED));
-		List<ClassEntity> classEntityList = classEntityRepository.findBySchoolYear(schoolYear);
-		List<ClassEntityResponse> classEntityResponseList = classEntityList.stream()
-				.map(classEntity -> classEntityMapper.toClassEntityResponse(classEntity))
-				.toList();
+	public ApiResponse<List<ClassEntityResponse>> getAllBySchoolYear(Long schoolYearId, String keyword) {
+		if(schoolYearId != null){
+			SchoolYear schoolYear = schoolYearRepository.findById(schoolYearId).orElseThrow(() -> new AppException(ErrorCode.YEAR_NOT_EXISTED));
+			List<ClassEntity> classEntityList = classEntityRepository.findBySchoolYearAndKeyWord(schoolYear,keyword);
+			List<ClassEntityResponse> classEntityResponseList = classEntityList.stream()
+					.map(classEntity -> classEntityMapper.toClassEntityResponse(classEntity))
+					.toList();
+			return ApiResponse.<List<ClassEntityResponse>>builder()
+					.result(classEntityResponseList)
+					.build();
+		}
 		return ApiResponse.<List<ClassEntityResponse>>builder()
-				.result(classEntityResponseList)
+				.result(new ArrayList<>())
 				.build();
 	}
 
 	@Override
 	public ApiResponse<ClassEntityResponse> createClass(Long schoolYearId, Long gradeId, ClassEntityRequest request) {
+		boolean existsByNameOfSchoolYear = classEntityRepository.existsByNameOfSchoolYear(schoolYearId,request.getName());
+		if(existsByNameOfSchoolYear){
+			throw new AppException(ErrorCode.CLASS_EXISTED);
+		}
 		SchoolYear schoolYear = schoolYearRepository.findById(schoolYearId)
 				.orElseThrow(() -> new AppException(ErrorCode.YEAR_NOT_EXISTED));
 		Grade grade = gradeRepository.findById(gradeId)
 				.orElseThrow(() -> new AppException(ErrorCode.GRADE_NOT_EXISTED));
+		User teacher = userRepository.findById(request.getTeacherId())
+				.orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+		boolean teacherExistsInYear  = classEntityRepository.existsByClassTeacherAndSchoolYear(teacher,schoolYear);
+
+		if(teacherExistsInYear){
+			throw new AppException(ErrorCode.TEACHER_ALREADY_ASSIGNED);
+		}
+
 		return ApiResponse.<ClassEntityResponse>builder()
 				.result(classEntityMapper.toClassEntityResponse(
 						classEntityRepository.save(ClassEntity.builder()
 						.name(request.getName())
 						.schoolYear(schoolYear)
 						.grade(grade)
+								.classTeacher(teacher)
 						.build())))
+				.build();
+	}
+
+	@Override
+	public ApiResponse<ClassEntityResponse> editClass(Long classEntityId,Long schoolYearId, Long gradeId, ClassEntityRequest request) {
+		ClassEntity classEntity = classEntityRepository.findById(classEntityId)
+				.orElseThrow(() -> new AppException(ErrorCode.CLASS_NOT_EXISTED));
+		SchoolYear schoolYear = schoolYearRepository.findById(schoolYearId)
+				.orElseThrow(() -> new AppException(ErrorCode.YEAR_NOT_EXISTED));
+		Grade grade = gradeRepository.findById(gradeId)
+				.orElseThrow(() -> new AppException(ErrorCode.GRADE_NOT_EXISTED));
+		User teacher = userRepository.findById(request.getTeacherId())
+				.orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+		boolean teacherExistsInYear  = classEntityRepository.existsByClassTeacherAndSchoolYear(teacher,schoolYear);
+
+		if(teacherExistsInYear){
+			throw new AppException(ErrorCode.TEACHER_ALREADY_ASSIGNED);
+		}
+		classEntityMapper.updateClassEntity(classEntity,request);
+		classEntity.setSchoolYear(schoolYear);
+		classEntity.setGrade(grade);
+		classEntity.setClassTeacher(teacher);
+
+		return ApiResponse.<ClassEntityResponse>builder()
+				.result(classEntityMapper.toClassEntityResponse(classEntityRepository.save(classEntity)))
 				.build();
 	}
 
@@ -101,6 +145,38 @@ public class ClassEntityServiceImpl implements ClassEntityService {
 			classEntityRepository.delete(classEntity);
 		});
     }
+
+	@Override
+	public void cpyData(Long schoolYearId) {
+		SchoolYear schoolYearNew = schoolYearRepository.findById(schoolYearId)
+				.orElseThrow(() -> new AppException(ErrorCode.YEAR_NOT_EXISTED));
+		if (!schoolYearNew.getClassEntities().isEmpty()) {
+			throw new AppException(ErrorCode.CLASS_EXISTED);
+		}
+		SchoolYear schoolYearOld = schoolYearRepository.findBySchoolYear(schoolYearNew.getSchoolYear() -1);
+		if(schoolYearOld == null){
+			throw new AppException(ErrorCode.YEAR_NOT_EXISTED);
+		}
+		List<ClassEntity> classEntityList = classEntityRepository.findBySchoolYear(schoolYearOld);
+		if(classEntityList.isEmpty()){
+			throw new AppException(ErrorCode.NO_DATA);
+		}
+		Set<ClassEntity> newClassEntities = new HashSet<>();
+		for (ClassEntity classEntity : classEntityList) {
+			ClassEntity newClassEntity = ClassEntity.builder()
+					.name(classEntity.getName())
+					.grade(classEntity.getGrade())
+					.schoolYear(schoolYearNew)
+					.build();
+			newClassEntities.add(newClassEntity);
+		}
+		schoolYearNew.getClassEntities().addAll(newClassEntities);
+		schoolYearRepository.save(schoolYearNew);
+		for (ClassEntity newClassEntity : newClassEntities) {
+			classEntityRepository.save(newClassEntity);
+		}
+	}
+
 
 	@Override
 	public List<ClassEntityResponse> getClassesByYearAndBlock(Integer year, Long khoid) {
@@ -143,7 +219,7 @@ public class ClassEntityServiceImpl implements ClassEntityService {
 			Optional<ClassEntity> classOptional = classEntityRepository.findById(request.getClassId());
 			ClassEntity classEntity = classOptional.get();
 			
-			classEntity.setTeacher(teacher);
+			classEntity.setClassTeacher(teacher);
 			classEntityRepository.save(classEntity);
 			
 		}

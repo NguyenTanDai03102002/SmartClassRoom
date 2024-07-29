@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class SchoolYearServiceImpl implements SchoolYearService{
@@ -21,8 +20,9 @@ public class SchoolYearServiceImpl implements SchoolYearService{
     private SchoolYearMapper schoolYearMapper;
 
     @Override
-    public ApiResponse<List<SchoolYearResponse>> getAll() {
-        List<SchoolYear> schoolYearList = schoolYearRepository.findAll();
+    public ApiResponse<List<SchoolYearResponse>> getAll(String keyword) {
+
+        List<SchoolYear> schoolYearList = schoolYearRepository.findAllByKeyWord(keyword);
         List<SchoolYearResponse> schoolYearResponseList = schoolYearList.stream()
                 .map(schoolYear -> schoolYearMapper.toSchoolYearResponse(schoolYear))
                 .toList();

@@ -10,6 +10,10 @@ const teacherSlice = createSlice({
         error: null,
     },
     reducers: {
+        FETCH_ALL_TEACHERS_REQUEST: (state, action) => {
+            state.loading = true;
+        },
+
         FETCH_ALL_TEACHERS_PAGE_SUCCESS: (state, action) => {
             state.error = null;
             state.loading = false;
@@ -17,6 +21,11 @@ const teacherSlice = createSlice({
             state.pageNumber = action.payload.pageable.pageNumber;
             state.totalPages = action.payload.totalPages;
         },
+
+        FETCH_ALL_TEACHERS_FAILURE: (state, action) => {
+            state.error = action.payload;
+        },
+
         FETCH_ALL_TEACHERS_PAGE_REQUEST: (state) => {
             state.loading = true;
         },
@@ -25,10 +34,6 @@ const teacherSlice = createSlice({
             state.teachers = action.payload;
             state.pageNumber = null;
             state.totalPages = null;
-        },
-
-        FETCH_ALL_TEACHERS_FAILURE: (state, action) => {
-            state.error = action.payload;
         },
     },
 });

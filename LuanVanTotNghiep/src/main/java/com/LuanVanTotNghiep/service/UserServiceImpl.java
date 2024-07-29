@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.LuanVanTotNghiep.Mapper.UserMapper;
+import com.LuanVanTotNghiep.dto.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
@@ -49,12 +50,13 @@ public class UserServiceImpl implements UserService {
 
 
 	@Override
-	public List<UserResponse> getAllTeacher() {
+	public ApiResponse<List<UserResponse>> getAllTeacher() {
 		Role teacherRole = roleRepository.findByName("TEACHER");
-	    List<User> teachers = userRepository.findByRolesContaining(teacherRole);
-	    return teachers.stream()
-	            .map(teacher -> userMapper.toUserResponse(teacher))
-	            .collect(Collectors.toList());
+	    List<User> teacherList = userRepository.findByRolesContaining(teacherRole);
+	    return ApiResponse.<List<UserResponse>>builder()
+				.result(teacherList.stream().map(t -> userMapper.toUserResponse(t))
+						.collect(Collectors.toList()))
+				.build() ;
 	}
 	@Override
 	public Page<UserResponse> getAllTeacherPageable(Pageable pageable, String keyword) {

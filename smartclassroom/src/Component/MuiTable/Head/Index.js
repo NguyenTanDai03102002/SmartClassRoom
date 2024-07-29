@@ -23,24 +23,26 @@ function Index({
     onSelectAllClick,
     isAllSelected,
     rowCount,
-    deleteRecord,
+    handleDelete,
     selected,
     setSelected,
+    action,
+    checkBox,
 }) {
     return (
         <TableHead className={cx('TableHead')}>
             <TableRow>
-                <TableCell colSpan={headCells.length + 2} className={cx('titleCell')}>
+                <TableCell colSpan={headCells?.length + 2} className={cx('titleCell')}>
                     <div className={cx('titleContainer')}>
                         {selected.length <= 0 ? <span>{title}</span> : `${selected.length} được chọn `}
                         {selected.length > 0 && (
                             <span
                                 onClick={async () => {
                                     try {
-                                        await deleteRecord(selected);
+                                        await handleDelete(selected);
                                         setSelected([]);
                                     } catch (error) {
-                                        console.error('Error during delete operation:', error);
+                                        console.error(error);
                                     }
                                 }}
                             >
@@ -51,18 +53,20 @@ function Index({
                 </TableCell>
             </TableRow>
             <TableRow>
-                <TableCell padding="checkbox">
-                    <Checkbox
-                        color="primary"
-                        indeterminate={numSelected > 0 && numSelected < rowCount}
-                        checked={isAllSelected}
-                        onChange={onSelectAllClick}
-                        inputProps={{
-                            'aria-label': 'select all desserts',
-                        }}
-                    />
-                </TableCell>
-                {headCells.map((headCell) => (
+                {checkBox && (
+                    <TableCell padding="checkbox">
+                        <Checkbox
+                            color="primary"
+                            indeterminate={numSelected > 0 && numSelected < rowCount}
+                            checked={isAllSelected}
+                            onChange={onSelectAllClick}
+                            inputProps={{
+                                'aria-label': 'select all desserts',
+                            }}
+                        />
+                    </TableCell>
+                )}
+                {headCells?.map((headCell) => (
                     <TableCell
                         key={headCell.id}
                         className={cx('label')}
@@ -83,7 +87,7 @@ function Index({
                         </TableSortLabel>
                     </TableCell>
                 ))}
-                <TableCell className={cx('label')}>Actions</TableCell>
+                {action && <TableCell className={cx('label')}>Actions</TableCell>}
             </TableRow>
         </TableHead>
     );

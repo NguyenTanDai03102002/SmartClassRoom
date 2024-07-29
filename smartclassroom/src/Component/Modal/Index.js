@@ -24,6 +24,7 @@ function Index({
     w700 = false,
     w800 = false,
     handleSubmitAdd,
+    handleSubmitEdit,
 }) {
     const classNameModalContent = {
         h300,
@@ -58,7 +59,11 @@ function Index({
                             Thêm
                         </Button>
                     ) : (
-                        edit && <Button btn>Lưu</Button>
+                        edit && (
+                            <Button btn onClick={handleSubmitEdit}>
+                                Lưu
+                            </Button>
+                        )
                     )}
                     <Button btn onClick={onClose}>
                         Thoát

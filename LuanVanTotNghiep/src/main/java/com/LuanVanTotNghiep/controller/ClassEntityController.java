@@ -12,16 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.LuanVanTotNghiep.dto.response.ClassEntityResponse;
@@ -38,8 +29,8 @@ public class ClassEntityController {
 	private ClassEntityService classEntityService;
 
 	@GetMapping("/getAllBySchoolYear")
-	public ApiResponse<List<ClassEntityResponse>> getAllByYear(@RequestParam Long schoolYearId) {
-		return classEntityService.getAllBySchoolYear(schoolYearId);
+	public ApiResponse<List<ClassEntityResponse>> getAllByYear(@RequestParam(required = false) Long schoolYearId,@RequestParam(required = false) String keyword) {
+		return classEntityService.getAllBySchoolYear(schoolYearId,keyword);
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
@@ -51,13 +42,28 @@ public class ClassEntityController {
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
+	@PutMapping("/editClass/{classEntityId}")
+	public ApiResponse<ClassEntityResponse> EditClass(@PathVariable Long classEntityId,
+														@RequestParam Long schoolYearId,
+														@RequestParam Long gradeId,
+														@RequestBody ClassEntityRequest request){
+		return classEntityService.editClass(classEntityId,schoolYearId,gradeId,request);
+	}
+
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/deleteClass")
 	public void DeleteClass(@RequestBody ArrayIdRequest request){
-		System.out.println(request);
 		classEntityService.deleteClass(request);
     }
 
-	
+
+	@PreAuthorize("hasRole('ADMIN')")
+	@PostMapping("/cpyData")
+	public void CpyData(@RequestParam Long schoolYearId){
+		classEntityService.cpyData(schoolYearId);
+	}
+
+
 	@GetMapping("/classes")
     public List<ClassEntityResponse> getClassesByYear(@RequestParam(required = false) Integer year, @RequestParam(required = false) Long khoiid) {
         return classEntityService.getClassesByYearAndBlock(year,khoiid);
