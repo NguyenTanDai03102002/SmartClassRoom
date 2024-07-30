@@ -2,41 +2,35 @@ package com.LuanVanTotNghiep.models;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.HashSet;
-import java.util.Set;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = {"scores","conduct","student","semester","schoolYear"})
-@ToString(exclude = {"scores","conduct","student","semester","schoolYear"})
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class AcademicResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    Long id;
 
-    private float meanScore;
-    private int studentRank;
+    float meanScore;
+    int studentRank;
 
-    @OneToMany(mappedBy = "academicResult" , cascade = CascadeType.ALL , orphanRemoval = true)
-    private Set<Score> scores =  new HashSet<>();
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "conduct_id")
-    private Conduct conduct;
+    Conduct conduct;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "student_id")
-    private User student;
+    User student;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "semester_id")
-    private Semester semester;
+    Semester semester;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "year_id")
-    private SchoolYear schoolYear;
+    SchoolYear schoolYear;
 }

@@ -16,7 +16,7 @@ public enum ErrorCode {
     //SchoolYear
     YEAR_NOT_EXISTED(10001,"Năm học không tồn tại",HttpStatus.NOT_FOUND),
     //Grade
-    GRADE_NOT_EXISTED(15001,"Năm học không tồn tại",HttpStatus.NOT_FOUND),
+    GRADE_NOT_EXISTED(15001,"Khối không tồn tại",HttpStatus.NOT_FOUND),
     //ClassEntity
     CLASS_NOT_EXISTED(20001,"Lớp học không tồn tại",HttpStatus.NOT_FOUND),
     CLASS_EXISTED(20003, "Lớp đã tồn tại",HttpStatus.BAD_REQUEST),

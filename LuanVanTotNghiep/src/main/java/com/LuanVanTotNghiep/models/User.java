@@ -1,68 +1,40 @@
 package com.LuanVanTotNghiep.models;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = {"roles","classEntity","subjects","teaches","academicResults","attendances","address"})
-@ToString(exclude = {"roles","classEntity","subjects","teaches","academicResults","attendances","address"})
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class User {
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	Long id;
 
-	private String userCode;
-	private String fullName;
-	private LocalDate birthday;
-	private String phoneNumber;
-	private int sex;
-	private String imageUrl;
-	private String email;
-	private String password;
-	private String job;
-	private String ethnicity;
-	private String nationality;
-	
-	
-	@ManyToMany(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
-	@JoinTable(name ="users_roles" ,
-			joinColumns = @JoinColumn(name = "user_id") , 
-			inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles = new HashSet<>();
-	
+	@Column(name = "userCode", unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
+	String userCode;
+	String fullName;
+	LocalDate birthday;
+	String phoneNumber;
+	int sex;
+	String imageUrl;
+	String email;
+	String password;
+	String job;
+	String ethnicity;
+	String nationality;
 
-	@ManyToMany(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
-	@JoinTable(name ="students_classes" ,
-			joinColumns = @JoinColumn(name = "student_id") ,
-			inverseJoinColumns = @JoinColumn(name = "class_id"))
-	private Set<ClassEntity> classEntity = new HashSet<>();
+	@ManyToMany
+	Set<Role> roles;
 
-	@ManyToMany(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
-	@JoinTable(name ="teachers_subjects" ,
-			joinColumns = @JoinColumn(name = "teacher_id") ,
-			inverseJoinColumns = @JoinColumn(name = "subject_id"))
-	private Set<Subject> subjects = new HashSet<>();
-	
-	@OneToMany(mappedBy = "user" , cascade = CascadeType.ALL , orphanRemoval = true)
-	private Set<Teach> teaches =  new HashSet<>();
-
-	@OneToMany(mappedBy = "student" , cascade = CascadeType.ALL , orphanRemoval = true)
-	private Set<AcademicResult> academicResults =  new HashSet<>();
-
-	@OneToMany(mappedBy = "student" , cascade = CascadeType.ALL , orphanRemoval = true)
-	private Set<Attendance> attendances =  new HashSet<>();
-
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "address_id")
-	private Address address;
-
+	Address address;
 }

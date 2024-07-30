@@ -10,32 +10,32 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = {"student","semester","schoolYear"})
-@ToString(exclude = {"student","semester","schoolYear"})
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Attendance {
 	
 	@Id
 	@GeneratedValue( strategy = GenerationType.IDENTITY)
-	private Long id;
+	Long id;
 	
-	private Date date;
-	private int status;
+	Date date;
+	int status;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "student_id")
-	private User student;
+	User student;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "semester_id")
-	private Semester semester;
+	Semester semester;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "year_id")
-	private SchoolYear schoolYear;
+	SchoolYear schoolYear;
 }

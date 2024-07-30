@@ -2,29 +2,24 @@ package com.LuanVanTotNghiep.models;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.HashSet;
-import java.util.Set;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = {"users"})
-@ToString(exclude = {"users"})
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    Long id;
 
-    private int houseNumber;
-    private String street;
-    private String hamlet;
-    private String ward;
-    private String district;
-    private String city;
+    int houseNumber;
+    String street;
+    String hamlet;
+    String ward;
+    String district;
+    String city;
 
-    @OneToMany(mappedBy = "address" , cascade = CascadeType.ALL , orphanRemoval = true)
-    private Set<User> users =  new HashSet<>();
 }

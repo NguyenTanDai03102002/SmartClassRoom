@@ -2,6 +2,7 @@ package com.LuanVanTotNghiep.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalTime;
 import java.util.HashSet;
@@ -11,20 +12,19 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = {"teaches"})
-@ToString(exclude = {"teaches"})
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Lesson {
 
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
-    private Long id;
+    Long id;
 
-    private int lesson;
-    private LocalTime start;
-    private LocalTime end;
+    int lesson;
+    LocalTime start;
+    LocalTime end;
 
-    @ManyToMany(mappedBy = "lessons")
-    private Set<Teach> teaches = new HashSet<>();
+    @ManyToMany
+    Set<Teach> teaches;
 
 }

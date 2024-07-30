@@ -1,42 +1,31 @@
 package com.LuanVanTotNghiep.models;
 
 
-import java.util.HashSet;
-import java.util.Set;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = {"attendances","academicResults"})
-@ToString(exclude = {"attendances","academicResults"})
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Semester {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	Long id;
 	
-	private String code;
-	private String name;
+	String code;
+	String name;
 
-	private int startDay;
-	private int startMonth;
+	int startDay;
+	int startMonth;
 
-	private int endDay;
-	private int endMonth;
-
-	@OneToMany(mappedBy = "semester" , cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<Attendance> attendances = new HashSet<>();
-
-	@OneToMany(mappedBy = "semester" , cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<AcademicResult> academicResults = new HashSet<>();
+	int endDay;
+	int endMonth;
 }

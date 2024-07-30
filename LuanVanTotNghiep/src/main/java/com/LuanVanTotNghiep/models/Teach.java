@@ -1,46 +1,38 @@
 package com.LuanVanTotNghiep.models;
 
 import java.time.DayOfWeek;
-import java.util.HashSet;
-import java.util.Set;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = {"lessons","user","subject","classEntity","schoolYear"})
-@ToString(exclude = {"lessons","user","subject","classEntity","schoolYear"})
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Teach {
 	@Id
 	@GeneratedValue( strategy = GenerationType.IDENTITY)
-	private Long id;
+	Long id;
 
-	private DayOfWeek dayOfWeek;
-
-	@ManyToMany(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
-	@JoinTable(name ="teaches_lessons" ,
-			joinColumns = @JoinColumn(name = "teach_id") ,
-			inverseJoinColumns = @JoinColumn(name = "lesson_id"))
-	private Set<Lesson> lessons = new HashSet<>();
+	DayOfWeek dayOfWeek;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "teacher_id")
-	private User user;
+	User teacher;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "subject_id")
-	private Subject subject;
+	Subject subject;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "class_id")
-	private ClassEntity classEntity;
+	ClassEntity classEntity;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "year_id")
-	private SchoolYear schoolYear;
+	SchoolYear schoolYear;
 
 }

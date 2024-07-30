@@ -1,30 +1,22 @@
 package com.LuanVanTotNghiep.models;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = {"users"})
-@ToString(exclude = {"users"})
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Role {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	Long id;
 
-	private String name;
-	
-	@ManyToMany(mappedBy = "roles")
-	private Set<User> users = new HashSet<>();
+	@Column(name = "name", unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
+	String name;
+
 }

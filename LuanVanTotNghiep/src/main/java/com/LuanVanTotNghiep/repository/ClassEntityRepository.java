@@ -21,7 +21,7 @@ public interface ClassEntityRepository extends JpaRepository<ClassEntity,Long> {
 
 	List<ClassEntity> findBySchoolYear(SchoolYear schoolYear);
 
-	List<ClassEntity> findBySchoolYearAndGrade(SchoolYear schoolYear, Grade grade);
+//	List<ClassEntity> findBySchoolYearAndGrade(SchoolYear schoolYear, Grade grade);
 
 	boolean existsByClassTeacherAndSchoolYear(User teacher, SchoolYear schoolYear);
 }

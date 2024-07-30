@@ -1,51 +1,40 @@
 package com.LuanVanTotNghiep.models;
 
 
-import java.util.HashSet;
 import java.util.Set;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = {"grade","teacher","schoolYear","students","teaches"})
-@ToString(exclude = {"grade","teacher","schoolYear","students","teaches"})
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class ClassEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	Long id;
 	
-	private String name;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
+	String name;
+
+	@ManyToMany
+	@JoinTable(name ="classes_students")
+	Set<User> students;
+
+	@ManyToOne
 	@JoinColumn(name = "grade_id")
-	private Grade grade;
+	Grade grade;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "gvcv")
-	private User classTeacher;
+	@ManyToOne
+	@JoinColumn(name = "classTeacher_id")
+	User classTeacher;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "year_id")
-	private SchoolYear schoolYear;
-		
-	@ManyToMany(mappedBy = "classEntity")
-	private Set<User> students = new HashSet<>();
-	
-	@OneToMany(mappedBy = "classEntity" , cascade = CascadeType.ALL , orphanRemoval = true)
-	private Set<Teach> teaches =  new HashSet<>();
+	SchoolYear schoolYear;
+
 }

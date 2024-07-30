@@ -9,10 +9,10 @@ import com.LuanVanTotNghiep.dto.request.TeachRequest;
 
 public interface TeachService {
 
-	ResponseEntity<?> XepGiangDay(List<TeachRequest> teachsRequestDTO);
-
+//	ResponseEntity<?> XepGiangDay(List<TeachRequest> teachsRequestDTO);
+//
 	List<TeachResponse> GetGiangDay();
-
-	List<TeachResponse> GetGiangDayByteacherId(Long teacherId);
-	
+//
+//	List<TeachResponse> GetGiangDayByteacherId(Long teacherId);
+//
 }

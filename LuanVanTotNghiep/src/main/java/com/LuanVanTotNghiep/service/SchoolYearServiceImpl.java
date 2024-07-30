@@ -1,33 +1,31 @@
 package com.LuanVanTotNghiep.service;
 
 import com.LuanVanTotNghiep.Mapper.SchoolYearMapper;
-import com.LuanVanTotNghiep.dto.response.ApiResponse;
 import com.LuanVanTotNghiep.dto.response.SchoolYearResponse;
 import com.LuanVanTotNghiep.models.SchoolYear;
 import com.LuanVanTotNghiep.repository.SchoolYearRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 public class SchoolYearServiceImpl implements SchoolYearService{
 
-    @Autowired
-    private SchoolYearRepository schoolYearRepository;
-
-    @Autowired
-    private SchoolYearMapper schoolYearMapper;
+    SchoolYearRepository schoolYearRepository;
+    SchoolYearMapper schoolYearMapper;
 
     @Override
-    public ApiResponse<List<SchoolYearResponse>> getAll(String keyword) {
+    public List<SchoolYearResponse> getAll(String keyword) {
 
         List<SchoolYear> schoolYearList = schoolYearRepository.findAllByKeyWord(keyword);
-        List<SchoolYearResponse> schoolYearResponseList = schoolYearList.stream()
-                .map(schoolYear -> schoolYearMapper.toSchoolYearResponse(schoolYear))
+
+        return schoolYearList.stream()
+                .map(schoolYearMapper::toSchoolYearResponse)
                 .toList();
-        return ApiResponse.<List<SchoolYearResponse>>builder()
-                .result(schoolYearResponseList)
-                .build();
     }
 }

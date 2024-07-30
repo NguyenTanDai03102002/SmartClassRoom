@@ -11,35 +11,35 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = {"subject","category","academicResult"})
-@ToString(exclude = {"subject","category","academicResult"})
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Score {
 	
 	@Id
 	@GeneratedValue( strategy = GenerationType.IDENTITY)
-	private Long id;
+	Long id;
 
-	private String score;
-	private Date createdTime;
-	private Date updatedTime;
+	String score;
+	Date createdTime;
+	Date updatedTime;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "subject_id")
-	private Subject subject;
+	Subject subject;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "category_id")
-	private Category category;
+	Category category;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "academicResult_id")
-	private AcademicResult academicResult;
+	AcademicResult academicResult;
 
 
 }

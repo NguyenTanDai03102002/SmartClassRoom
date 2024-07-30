@@ -2,25 +2,19 @@ package com.LuanVanTotNghiep.models;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.HashSet;
-import java.util.Set;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = {"academicResults"})
-@ToString(exclude = {"academicResults"})
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Conduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    Long id;
 
-    private String name;
-
-    @OneToMany(mappedBy = "conduct" , cascade = CascadeType.ALL , orphanRemoval = true)
-    private Set<AcademicResult> academicResults =  new HashSet<>();
+    String name;
 
 }

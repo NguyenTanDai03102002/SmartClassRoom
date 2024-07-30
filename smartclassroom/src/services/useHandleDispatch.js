@@ -171,13 +171,21 @@ export const useHandleDispatch = () => {
     };
     const deleteclass = async (token, dataDel) => {
         try {
-            await deleteClass(token, dataDel);
-        } catch (error) {}
+            const response = await deleteClass(token, dataDel);
+            if (response.data.code === 1000) {
+                return response.data;
+            }
+        } catch (error) {
+            return error.response.data;
+        }
     };
 
     const cpydata = async (token, schoolYearId) => {
         try {
-            await cpyData(token, schoolYearId);
+            const response = await cpyData(token, schoolYearId);
+            if (response.data.code === 1000) {
+                return response.data;
+            }
         } catch (error) {
             return error.response.data;
         }

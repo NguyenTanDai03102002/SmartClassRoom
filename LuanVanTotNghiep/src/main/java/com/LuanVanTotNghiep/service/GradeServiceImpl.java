@@ -7,26 +7,24 @@ import com.LuanVanTotNghiep.Mapper.GradeMapper;
 import com.LuanVanTotNghiep.dto.response.ApiResponse;
 import com.LuanVanTotNghiep.models.Grade;
 import com.LuanVanTotNghiep.repository.GradeRepository;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.LuanVanTotNghiep.dto.response.GradeResponse;
 
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 public class GradeServiceImpl implements GradeService {
-
-	@Autowired
-	private GradeRepository gradeRepository;
-
-	@Autowired
-	private GradeMapper gradeMapper;
+	GradeRepository gradeRepository;
+	GradeMapper gradeMapper;
 
 	@Override
-	public ApiResponse<List<GradeResponse>> getAll() {
+	public List<GradeResponse> getAll() {
 		List<Grade> gradeList = gradeRepository.findAll();
-		return ApiResponse.<List<GradeResponse>>builder()
-				.result(gradeList.stream().map(grade -> gradeMapper.toGradeResponse(grade))
-						.collect(Collectors.toList()))
-				.build();
+		return gradeList.stream().map(gradeMapper::toGradeResponse).collect(Collectors.toList());
 	}
 }

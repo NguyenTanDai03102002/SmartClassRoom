@@ -132,9 +132,13 @@ function Index() {
     const handleDelete = (dataDel) => {
         showBeforeDelete(`Bạn muốn xóa :)`).then(async (result) => {
             if (result.isConfirmed) {
-                await deleteclass(token, dataDel);
-                getallclassesbyyear(YearId);
-                showSuccessMessage('Bạn xóa mất tiêu rồi :(');
+                const response = await deleteclass(token, dataDel);
+                if (response.code === 1000) {
+                    getallclassesbyyear(YearId);
+                    showSuccessMessage(response.result);
+                } else {
+                    showErrorMessage(response.message);
+                }
             } else {
                 showErrorMessage('Bạn đừng phân vân nữa:)');
             }
@@ -169,11 +173,11 @@ function Index() {
 
     const handleCoppy = async () => {
         const response = await cpydata(token, YearId);
-        if (response) {
-            showErrorMessage(response.message);
-        } else {
-            showSuccessMessage('Thành công');
+        if (response.code === 1000) {
+            showSuccessMessage(response.result);
             getallclassesbyyear(YearId);
+        } else {
+            showErrorMessage(response.message);
         }
     };
     return (

@@ -7,7 +7,6 @@ import com.LuanVanTotNghiep.dto.request.AuthenticationRequest;
 import com.LuanVanTotNghiep.dto.request.IntrospectRequest;
 import com.LuanVanTotNghiep.dto.request.LogoutRequest;
 import com.LuanVanTotNghiep.dto.request.RefreshRequest;
-import com.LuanVanTotNghiep.dto.response.ApiResponse;
 import com.LuanVanTotNghiep.dto.response.AuthenticationResponse;
 import com.LuanVanTotNghiep.dto.response.IntrospectResponse;
 import com.LuanVanTotNghiep.dto.response.RefreshResponse;
@@ -20,8 +19,10 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,16 +37,12 @@ import java.util.StringJoiner;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationServiceImpl implements AuthenticationService{
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private InvalidatedTokenRepository invalidatedTokenRepository;
+    UserRepository userRepository;
+    UserMapper userMapper;
+    InvalidatedTokenRepository invalidatedTokenRepository;
 
     @NonFinal
     @Value("${jwt.key}")
@@ -58,8 +55,6 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     @NonFinal
     @Value("${jwt.refreshable-duration}")
     protected long REFRESHABLE_DURATION;
-
-
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -162,7 +157,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getUserCode())
-                .issuer("NguyenTanDai.com")
+                .issuer("daiB2014647@Student.ctu.edu.vn")
                 .issueTime(new Date())
                 .expirationTime(new Date(
                         Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()

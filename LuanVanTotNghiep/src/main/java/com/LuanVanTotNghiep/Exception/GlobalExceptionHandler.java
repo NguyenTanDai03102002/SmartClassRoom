@@ -1,12 +1,8 @@
 package com.LuanVanTotNghiep.Exception;
 
 import com.LuanVanTotNghiep.dto.response.ApiResponse;
-import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.expression.AccessException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -14,8 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
-    ResponseEntity<ApiResponse<?>> handlingRuntimeException(RuntimeException exception) {
-        ApiResponse<?> apiResponse = new ApiResponse<>();
+    ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException exception) {
+        ApiResponse apiResponse = new ApiResponse();
 
         apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
         apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
@@ -24,7 +20,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = AccessException.class)
-    ResponseEntity<ApiResponse<?>> handlingAccessException(AccessException exception) {
+    ResponseEntity<ApiResponse> handlingAccessException(AccessException exception) {
         ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
 
         return ResponseEntity
@@ -36,9 +32,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = AppException.class)
-    ResponseEntity<ApiResponse<?>> AppExceptionHandler(AppException exception) {
+    ResponseEntity<ApiResponse> AppExceptionHandler(AppException exception) {
         ErrorCode errorCode = exception.getErrorCode();
-        ApiResponse<?> apiResponse = new ApiResponse<>();
+        ApiResponse apiResponse = new ApiResponse();
 
         apiResponse.setCode(errorCode.getCode());
         apiResponse.setMessage(errorCode.getMessage());

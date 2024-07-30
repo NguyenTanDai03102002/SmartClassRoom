@@ -6,5 +6,5 @@ import com.LuanVanTotNghiep.dto.response.ApiResponse;
 import com.LuanVanTotNghiep.dto.response.GradeResponse;
 
 public interface GradeService {
-    ApiResponse<List<GradeResponse>> getAll();
+    List<GradeResponse> getAll();
 }

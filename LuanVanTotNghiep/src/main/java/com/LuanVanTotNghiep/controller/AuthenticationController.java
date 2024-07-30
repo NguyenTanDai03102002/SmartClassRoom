@@ -7,33 +7,30 @@ import com.LuanVanTotNghiep.dto.response.ApiResponse;
 import com.LuanVanTotNghiep.dto.response.AuthenticationResponse;
 import com.LuanVanTotNghiep.dto.response.RefreshResponse;
 import com.LuanVanTotNghiep.service.AuthenticationService;
-import com.LuanVanTotNghiep.service.FileUpload;
 import com.nimbusds.jose.JOSEException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.text.ParseException;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin("*")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationController {
 
-    @Autowired
-    private AuthenticationService authenticationService;
+    AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
+    ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
         AuthenticationResponse result = authenticationService.authenticate(request);
         return ApiResponse.<AuthenticationResponse>builder().result(result).build();
     }
 
     @PostMapping("/logout")
-    ApiResponse<Void> logout(@RequestBody LogoutRequest request)
-            throws ParseException, JOSEException {
+    ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
         authenticationService.logout(request);
         return ApiResponse.<Void>builder().build();
     }

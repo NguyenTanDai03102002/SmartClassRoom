@@ -8,6 +8,5 @@ import com.LuanVanTotNghiep.models.Teach;
 import com.LuanVanTotNghiep.models.User;
 
 public interface TeachRepository extends JpaRepository<Teach, Long> {
-
-	List<Teach> findByUser(User user);
+//	List<Teach> findByUser(User user);
 }

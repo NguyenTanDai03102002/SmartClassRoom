@@ -16,31 +16,13 @@ import com.LuanVanTotNghiep.dto.response.UserResponse;
 
 public interface ClassEntityService {
 
+	List<ClassEntityResponse> getAllBySchoolYear(Long schoolYearId, String keyword);
 
-	ApiResponse<List<ClassEntityResponse>> getAllBySchoolYear(Long schoolYearId, String keyword);
+	ClassEntityResponse createClass(Long schoolYearId, Long gradeId, ClassEntityRequest request);
 
-	ApiResponse<ClassEntityResponse> createClass(Long schoolYearId, Long gradeId, ClassEntityRequest request);
-
-	ApiResponse<ClassEntityResponse> editClass(Long classEntityId,Long schoolYearId, Long gradeId, ClassEntityRequest request);
+	ClassEntityResponse editClass(Long classEntityId,Long schoolYearId, Long gradeId, ClassEntityRequest request);
 
 	void deleteClass(ArrayIdRequest request);
 
 	void cpyData(Long schoolYearId);
-
-	List<ClassEntityResponse> getClassesByYearAndBlock(Integer year, Long khoiid);
-
-	ResponseEntity<?> importexcel(Long classid,List<UserResponse> requests);
-
-	List<ClassEntityResponse> addTeachersToClasses(List<TeacherClassRequest> requests);
-
-	Page<UserResponse> getallstudentsofclass(Long classid, Pageable pageable, String keyword);
-
-	ResponseEntity<?> deleteuserclass(Long userid, Long classid);
-
-	ResponseEntity<?> addusertoclass(Long classid, UserResponse userResponse, MultipartFile image);
-
-	List<UserResponse> getStudentsnopage(Long classid);
-
-
-
 }

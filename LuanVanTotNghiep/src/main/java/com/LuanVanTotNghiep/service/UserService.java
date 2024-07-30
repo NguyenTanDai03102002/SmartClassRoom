@@ -12,19 +12,19 @@ import org.springframework.web.multipart.MultipartFile;
 import com.LuanVanTotNghiep.dto.response.UserResponse;
 
 public interface UserService {
-	ApiResponse<List<UserResponse>> getAllTeacher();
+	List<UserResponse> getAllTeacher();
 
-	ResponseEntity<ByteArrayResource> getImageMainUrlFromUser(Long userid);
-
-	ResponseEntity<?> EditStudentInClass(Long userid, UserResponse userdto, MultipartFile image);
-
-	ResponseEntity<?> importexcelTeacher(List<UserResponse> teachersDTO);
-
-	Page<UserResponse> getAllTeacherPageable(Pageable pageable, String keyword);
-
-	ResponseEntity<?> addteacher(UserResponse userdto, MultipartFile image);
-
-	ResponseEntity<?> editTeacher(Long userId, UserResponse userdto, MultipartFile image);
-
-	ResponseEntity<?> deleteTeacher(Long userId);
+//	ResponseEntity<ByteArrayResource> getImageMainUrlFromUser(Long userid);
+//
+//	ResponseEntity<?> EditStudentInClass(Long userid, UserResponse userdto, MultipartFile image);
+//
+//	ResponseEntity<?> importexcelTeacher(List<UserResponse> teachersDTO);
+//
+//	Page<UserResponse> getAllTeacherPageable(Pageable pageable, String keyword);
+//
+//	ResponseEntity<?> addteacher(UserResponse userdto, MultipartFile image);
+//
+//	ResponseEntity<?> editTeacher(Long userId, UserResponse userdto, MultipartFile image);
+//
+//	ResponseEntity<?> deleteTeacher(Long userId);
 }
